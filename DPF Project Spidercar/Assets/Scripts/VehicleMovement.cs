@@ -7,7 +7,6 @@ public class VehicleMovement : MonoBehaviour
 {
     //VARIABLE DECLARATION//
 
-    public GameObject target;
     public float maxSpeed = 200;
     Vector2 movement;
     Rigidbody2D rigidBody;

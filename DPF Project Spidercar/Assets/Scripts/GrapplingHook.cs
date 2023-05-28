@@ -6,7 +6,7 @@ using UnityEngine;
 public class GrapplingHook : MonoBehaviour
 {
     public GameObject pointToLookTo;
-    public SpringJoint2D springJoint;
+    private SpringJoint2D springJoint;
 
     void Start()
     {

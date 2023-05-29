@@ -7,10 +7,14 @@ public class GrapplingHook : MonoBehaviour
 {
     public GameObject pointToLookTo;
     private SpringJoint2D springJoint;
+    private Rigidbody2D rb;
+
+    float piFloat = 3.141592f; //Max precision for float, but it doesn't matter too much
 
     void Start()
     {
         springJoint = GetComponent<SpringJoint2D>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -41,11 +45,36 @@ public class GrapplingHook : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Tab))
         {
+            /* So the calculation code doesn't work as I intend it to... Here are some possible culprits, in order of troubleshooting priority:
+             * 1. General logic is incorrect and needs to be sanity checked!
+             *      I think this is incredibly likely, as my understanding of physics and applying forces is low, so researching and even breaking down
+             *      the problem to make sure the calculation logic is sound will help immensely
+             *      
+             * 2. vehicleVelocity magnitude is not a way to derive distance correctly!
+             *      This also feels likely, as I have no clue if comparing the two numbers is actually giving the result it should mathermatically. I'll
+             *      have to do some pen to paper, step by step calculations to find if this is true.
+             *      
+             * 3. Check all variables to see if there values are consistent and therefore comparable against eachother!
+             *      If the top two are fine, scumming through each variable to see what scale and measurements its operating on can help with seeing if
+             *      that is what is causing the discrepancies and errors.
+             */
+
+            //Finds rotation angle for the RotateAround function with ***MATHS***
+            float distanceRadius = springJoint.distance; //Finds grapple distance by reading the distance variable on the spring joint
+            float vehicleVelocity = rb.velocity.magnitude; //Finds current vehicle velocity
+            //Now the calculations are made
+            float grappleCircumference = 2 * piFloat * distanceRadius; //Finds circumference of turning circle (distance)
+            float fullRotationTime = grappleCircumference / vehicleVelocity; //Finds the time it would take to finish the circle. Unsure of what measurement of time it would refer to...
+            float segmentTimePerUpdate = fullRotationTime * Time.fixedDeltaTime; //This doesn't work, as it rounds down the number to small, making the result to miniscule. Return to this and fix it
+            float rotationAngle = 360 / segmentTimePerUpdate; //Should determine the angle, but it doesn't :(
+
+            Debug.Log(grappleCircumference + " / " + vehicleVelocity + " = " + fullRotationTime);
+
+            //Handles Rotation Logic
             springJoint.enabled = true;
             Vector3 rotationMask = new Vector3(0, 0, 1);
             Vector3 point = pointToLookTo.transform.position;
-            transform.RotateAround(point, rotationMask, Time.deltaTime * -30);
-            Debug.Log(Time.fixedDeltaTime);
+            transform.RotateAround(point, rotationMask, Time.deltaTime * -rotationAngle);
         }
 
         else

@@ -501,7 +501,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 678278361}
   m_LocalRotation: {x: -0, y: -0, z: 0.22145082, w: 0.97517157}
-  m_LocalPosition: {x: 16.73, y: 2.47, z: 0}
+  m_LocalPosition: {x: 0.7, y: 20.8, z: 0}
   m_LocalScale: {x: 10, y: 10, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -732,13 +732,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 596845389144301645, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
+      propertyPath: maxSpeed
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 8366977117718219974, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: m_Name
       value: Player Car
       objectReference: {fileID: 0}
     - target: {fileID: 8366977117718219980, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: m_Distance
-      value: 7.7048106
+      value: 9.542537
       objectReference: {fileID: 0}
     - target: {fileID: 8366977117718219980, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: m_ConnectedRigidBody
@@ -750,11 +754,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8366977117718219981, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -25.51
+      value: -19.04
       objectReference: {fileID: 0}
     - target: {fileID: 8366977117718219981, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.35
+      value: 1.66
       objectReference: {fileID: 0}
     - target: {fileID: 8366977117718219981, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: m_LocalPosition.z
@@ -790,6 +794,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8366977117718219983, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: pointToLookTo
+      value: 
+      objectReference: {fileID: 1273589625}
+    - target: {fileID: 8366977117718219983, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
+      propertyPath: grappleLayers.m_Bits
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8366977117718219983, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
+      propertyPath: grapplePointInstantiate
       value: 
       objectReference: {fileID: 1273589625}
     m_RemovedComponents: []

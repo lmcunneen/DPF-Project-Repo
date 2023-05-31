@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8366977117718219970}
   - component: {fileID: 8366977117718219971}
   - component: {fileID: 8366977117718219968}
-  - component: {fileID: 8366977117718219982}
+  - component: {fileID: 596845389144301645}
   - component: {fileID: 8366977117718219983}
   - component: {fileID: 8366977117718219980}
   m_Layer: 0
@@ -137,7 +137,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &8366977117718219982
+--- !u!114 &596845389144301645
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -150,7 +150,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 500
-  currentSpeed: 0
 --- !u!114 &8366977117718219983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,7 +163,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointToLookTo: {fileID: 0}
-  springJoint: {fileID: 0}
 --- !u!231 &8366977117718219980
 SpringJoint2D:
   m_ObjectHideFlags: 0
@@ -182,7 +180,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.005
+  m_Distance: 25.512402
   m_DampingRatio: 0
   m_Frequency: 5.99
 --- !u!1 &8366977117895792795

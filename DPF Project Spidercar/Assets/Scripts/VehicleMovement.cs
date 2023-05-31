@@ -7,14 +7,13 @@ public class VehicleMovement : MonoBehaviour
 {
     //VARIABLE DECLARATION//
 
-    public float maxSpeed = 200;
-    Vector2 movement;
+    [SerializeField] private float maxSpeed = 500;
     Rigidbody2D rigidBody;
-    [SerializeField] private float currentSpeed;
 
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
+        float speedDebug = maxSpeed * Time.fixedDeltaTime;
     }
 
     // Update is called once per frame
@@ -32,7 +31,7 @@ public class VehicleMovement : MonoBehaviour
         
         else
         {
-            rigidBody.AddForce(transform.up * maxSpeed * Time.deltaTime);
+            rigidBody.AddForce(transform.up * maxSpeed * Time.fixedDeltaTime);
         }
     }
 }

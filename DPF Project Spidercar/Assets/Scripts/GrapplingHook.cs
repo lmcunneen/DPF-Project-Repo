@@ -5,19 +5,21 @@ using UnityEngine;
 
 public class GrapplingHook : MonoBehaviour
 {
-    public GameObject grapplePointInstantiate;
-    private SpringJoint2D springJoint;
-    private Rigidbody2D rb;
+    public GameObject grapplePointObject; //The game object that defines where the grapple hook is
+    private SpringJoint2D springJoint; //The component that joins together the car and grapple point by a 'rope' essentially
+    private Rigidbody2D rb; //The rigidbody component that calculates physics such as drag, mass and gravity
 
-    float piFloat = 3.141592f; //Max precision for float, but it doesn't matter too much
+    float piFloat; //Used for circumference calculations. 
 
-    private Ray2D grapplePointRaycast;
     private RaycastHit2D grapplePointRaycastHit;
-    public float grappleRayLength = 10f;
+    private float grappleRayLength;
     public LayerMask grappleLayers;
 
     void Start()
     {
+        piFloat = 3.141592f;
+        grappleRayLength = 10f;
+
         springJoint = GetComponent<SpringJoint2D>();
         rb = GetComponent<Rigidbody2D>();
     }
@@ -25,36 +27,40 @@ public class GrapplingHook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        grapplePointRaycast = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Input.GetKeyDown(KeyCode.Mouse0)) //When the mouse is pressed down (activating once), find the grapple point
+        {
+            var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mouseWorldPos.z = 0;
+            var ugh = new Quaternion(0, 0, 0, 1);
+            Instantiate(grapplePointObject, mouseWorldPos, ugh);
+            grapplePointRaycastHit = Physics2D.Raycast(transform.position, mouseWorldPos, grappleRayLength, grappleLayers);
+
+            //grapplePointObject.transform.position = grapplePointRaycastHit.transform.position;
+        }
     }
 
     void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKey(KeyCode.Mouse0)) //While the mouse is held down, do the following physics calculations
         {
-            if (Physics2D.Raycast(grapplePointRaycast, out grapplePointRaycastHit, grappleRayLength, grappleLayers))
-            {
-                Instantiate(grapplePointInstantiate, grapplePointRaycastHit.point, Quaternion.identity);
-                
-                //Finds rotation angle for the RotateAround function with ***MATHS***
-                float distanceRadius = springJoint.distance; //Finds grapple distance by reading the distance variable on the spring joint
-                float vehicleVelocity = rb.velocity.magnitude; //Finds current vehicle velocity
-                //Now the calculations are made
-                float grappleCircumference = 2 * piFloat * distanceRadius; //Finds circumference of turning circle (distance)
-                float fullRotationTime = grappleCircumference / vehicleVelocity; //Finds the time it would take to finish the circle. Unsure of what measurement of time it would refer to...
-                float segmentTimePerUpdate = fullRotationTime * Time.fixedDeltaTime; //This doesn't work, as it rounds down the number to small, making the result to miniscule. Return to this and fix it
-                float rotationAngle = 360 / (segmentTimePerUpdate * 50); //Should determine the angle, but it doesn't :(
+            //Finds rotation angle for the RotateAround function with ***MATHS***
+            float distanceRadius = springJoint.distance; //Finds grapple distance by reading the distance variable on the spring joint
+            float vehicleVelocity = rb.velocity.magnitude; //Finds current vehicle velocity
+                                                           //Now the calculations are made
+            float grappleCircumference = 2 * piFloat * distanceRadius; //Finds circumference of turning circle (distance)
+            float fullRotationTime = grappleCircumference / vehicleVelocity; //Finds the time it would take to finish the circle. Unsure of what measurement of time it would refer to...
+            float segmentTimePerUpdate = fullRotationTime * Time.fixedDeltaTime; //This doesn't work, as it rounds down the number to small, making the result to miniscule. Return to this and fix it
+            float rotationAngle = 360 / (segmentTimePerUpdate * 50); //Should determine the angle, but it doesn't :(
 
-                Debug.Log("VELOCITY: " + vehicleVelocity);
-                //Debug.Log(grappleCircumference + " / " + vehicleVelocity + " = " + fullRotationTime);
-                //Debug.Log(rotationAngle);
+            //Debug.Log("VELOCITY: " + vehicleVelocity);
+            //Debug.Log(grappleCircumference + " / " + vehicleVelocity + " = " + fullRotationTime);
+            //Debug.Log(rotationAngle);
 
-                //Handles Rotation Logic
-                springJoint.enabled = true;
-                Vector3 rotationMask = new Vector3(0, 0, 1);
-                Vector3 point = grapplePointInstantiate.transform.position;
-                transform.RotateAround(point, rotationMask, Time.fixedDeltaTime * -rotationAngle);
-            }
+            //Handles Rotation Logic
+            springJoint.enabled = true;
+            Vector3 rotationMask = new Vector3(0, 0, 1);
+            Vector3 point = grapplePointObject.transform.position;
+            transform.RotateAround(point, rotationMask, Time.fixedDeltaTime * -rotationAngle);
         }
 
         else

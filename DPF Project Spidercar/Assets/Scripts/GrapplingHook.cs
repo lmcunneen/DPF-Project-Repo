@@ -8,6 +8,8 @@ public class GrapplingHook : MonoBehaviour
     public GameObject grapplePointObject; //The game object that defines where the grapple hook is
     private SpringJoint2D springJoint; //The component that joins together the car and grapple point by a 'rope' essentially
     private Rigidbody2D rb; //The rigidbody component that calculates physics such as drag, mass and gravity
+    private LineRenderer lineRenderer; //The component that draws the rope between the grapple and the car
+    private Vector3[] lineRendererPoints;
 
     float piFloat; //Used for circumference calculations. 
 
@@ -15,13 +17,14 @@ public class GrapplingHook : MonoBehaviour
     private float grappleRayLength;
     public LayerMask grappleLayers;
 
-    void Start()
+    void Awake()
     {
         piFloat = 3.141592f;
         grappleRayLength = 10f;
 
         springJoint = GetComponent<SpringJoint2D>();
         rb = GetComponent<Rigidbody2D>();
+        lineRenderer = GetComponent<LineRenderer>();
     }
 
     // Update is called once per frame
@@ -46,11 +49,11 @@ public class GrapplingHook : MonoBehaviour
             //Finds rotation angle for the RotateAround function with ***MATHS***
             float distanceRadius = springJoint.distance; //Finds grapple distance by reading the distance variable on the spring joint
             float vehicleVelocity = rb.velocity.magnitude; //Finds current vehicle velocity
-                                                           //Now the calculations are made
+            //Now the calculations are made
             float grappleCircumference = 2 * piFloat * distanceRadius; //Finds circumference of turning circle (distance)
             float fullRotationTime = grappleCircumference / vehicleVelocity; //Finds the time it would take to finish the circle. Unsure of what measurement of time it would refer to...
             float segmentTimePerUpdate = fullRotationTime * Time.fixedDeltaTime; //This doesn't work, as it rounds down the number to small, making the result to miniscule. Return to this and fix it
-            float rotationAngle = 360 / (segmentTimePerUpdate * 50); //Should determine the angle, but it doesn't :(
+            float rotationAngle = 360 / (segmentTimePerUpdate * 50); //Determines the angle (still needs more work to accurately find it)
 
             //Debug.Log("VELOCITY: " + vehicleVelocity);
             //Debug.Log(grappleCircumference + " / " + vehicleVelocity + " = " + fullRotationTime);
@@ -58,14 +61,19 @@ public class GrapplingHook : MonoBehaviour
 
             //Handles Rotation Logic
             springJoint.enabled = true;
+            lineRenderer.enabled = true;
             Vector3 rotationMask = new Vector3(0, 0, 1);
             Vector3 point = grapplePointObject.transform.position;
             transform.RotateAround(point, rotationMask, Time.fixedDeltaTime * -rotationAngle);
+
+            lineRendererPoints = new Vector3[]  { grapplePointObject.transform.position , gameObject.transform.position };
+            lineRenderer.SetPositions(lineRendererPoints);
         }
 
         else
         {
             springJoint.enabled = false;
+            lineRenderer.enabled = false;
         }
     }
 }

@@ -156,7 +156,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 21.44254
+  m_Distance: 75.40344
   m_DampingRatio: 0
   m_Frequency: 5.99
 --- !u!1 &8366977117895792795

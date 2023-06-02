@@ -62,18 +62,20 @@ public class GrapplingHook : MonoBehaviour
              */
             Vector2 grapplePointDot = grapplePointObject.transform.position - transform.position;
             relativePosition = Vector2.Dot(transform.right, grapplePointDot);
-            //Debug.Log(relativePosition);
+            Debug.Log(relativePosition);
             velocity = rb.velocity;
             localVelocity = transform.InverseTransformDirection(velocity);
 
             if (relativePosition < 0 && localVelocity.x > 0 || relativePosition > 0 && localVelocity.x < 0)
             {
                 turnMultiplier = -1;
+                Debug.Log(turnMultiplier);
             }
 
             else
             {
                 turnMultiplier = 1;
+                Debug.Log(turnMultiplier);
             }
 
             //Finds rotation angle for the RotateAround function with ***MATHS***

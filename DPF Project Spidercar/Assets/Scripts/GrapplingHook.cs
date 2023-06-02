@@ -1,7 +1,5 @@
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class GrapplingHook : MonoBehaviour
@@ -10,16 +8,18 @@ public class GrapplingHook : MonoBehaviour
     private SpringJoint2D springJoint; //The component that joins together the car and grapple point by a 'rope' essentially
     private Rigidbody2D rb; //The rigidbody component that calculates physics such as drag, mass and gravity
     private LineRenderer lineRenderer; //The component that draws the rope between the grapple and the car
-    private Vector3[] lineRendererPoints;
+    private Vector3[] lineRendererPoints; //Array of the points the line renderer conforms to
 
     float piFloat; //Used for circumference calculations. 
 
     private float grappleRayLength;
-    public LayerMask grappleLayers;
+    public LayerMask grappleLayers; //Filters only Walls and Poles for grappling raycast
     private Color debugGrappleColour = Color.white;
 
-    float relativePosition;
+    float relativePosition; //The float that holds the result of the dot product to determine where the grapple is relative to the car
     float turnMultiplier; //The float used to make the rotationAngle positive or negative, making it turn correctly for left and right
+    Vector2 velocity; //Finding velocity for turnMultiplier checks (forwards and backwards changes rotation)
+    Vector3 localVelocity;
 
     void Awake()
     {
@@ -45,9 +45,6 @@ public class GrapplingHook : MonoBehaviour
             Debug.Log("Raycast hit at this location: " + grapplePointRaycastHit.transform.position);
 
             //grapplePointObject.transform.position = grapplePointRaycastHit.transform.position;
-
-            Vector2 grapplePointDot = grapplePointObject.transform.position - transform.position;
-            relativePosition = Vector2.Dot(Vector2.left, grapplePointDot);
         }
     }
 
@@ -55,15 +52,28 @@ public class GrapplingHook : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Mouse0)) //While the mouse is held down, do the following physics calculations
         {
+            /* This function finds where the grapple is relative to the car, so it can calculate to turn clockwise or anti-clockwise
+             * NOTE: It updates the position every frame, but to work properly it needs to only update once. 
+             * However, putting it in Update under GetKeyDown(Mouse0) returns 0 always...
+             * And making a seperate if statement in the FixedUpdate, cancels out all the rotation for some unknown reason.
+             * -----------------------------------------------------------------------
+             * PLEASE DEBUG AND FIX ISSUE WHEN POSSIBLE! IT'S INCREDIBLY VITAL!
+             * -----------------------------------------------------------------------
+             */
+            Vector2 grapplePointDot = grapplePointObject.transform.position - transform.position;
+            relativePosition = Vector2.Dot(transform.right, grapplePointDot);
+            //Debug.Log(relativePosition);
+            velocity = rb.velocity;
+            localVelocity = transform.InverseTransformDirection(velocity);
 
-            if (relativePosition < 0)
+            if (relativePosition < 0 && localVelocity.x > 0 || relativePosition > 0 && localVelocity.x < 0)
             {
-                turnMultiplier = 1;
+                turnMultiplier = -1;
             }
 
             else
             {
-                turnMultiplier = -1;
+                turnMultiplier = 1;
             }
 
             //Finds rotation angle for the RotateAround function with ***MATHS***

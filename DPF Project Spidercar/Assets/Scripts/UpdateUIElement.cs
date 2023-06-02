@@ -7,6 +7,6 @@ public class UpdateUIElement : MonoBehaviour
 {
     public void UpdateElementInt(int number, Text element)
     {
-        element.text = "Score: " + number;
+        element.text = "Score: " + number + "m";
     }
 }

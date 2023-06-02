@@ -144,3 +144,9 @@ public class GrapplingHook : MonoBehaviour
         directionToFace = pointToLookTo.transform.position - transform.position;
         Vector3 lookAtRotation = Quaternion.LookRotation(directionToFace).eulerAngles;
         transform.rotation = Quaternion.Euler(Vector3.Scale(lookAtRotation, rotationMask)); */
+
+/* IDEA THAT OSCAR SUGGESTED, TEST AT HOME:
+ * The order of operations (ie when each update happens) is different than I originally thought
+ * So stepping through line by line, finding exactly what I want to do when will be incredibly helpful
+ * https://docs.unity3d.com/Manual/ExecutionOrder.html
+ * Good luck future me! */

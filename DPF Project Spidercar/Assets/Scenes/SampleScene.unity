@@ -421,6 +421,7 @@ MonoBehaviour:
   scoreCounter: {fileID: 1680579573}
   distanceLength: 0
   roundedDistance: 0
+  highestScore: 0
 --- !u!1 &325948584
 GameObject:
   m_ObjectHideFlags: 0
@@ -1960,7 +1961,7 @@ GameObject:
   - component: {fileID: 1680579574}
   - component: {fileID: 1680579573}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: Score Counter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

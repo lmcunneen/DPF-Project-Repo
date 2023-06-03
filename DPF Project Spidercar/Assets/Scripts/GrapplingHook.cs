@@ -16,10 +16,13 @@ public class GrapplingHook : MonoBehaviour
     public LayerMask grappleLayers; //Filters only Walls and Poles for grappling raycast
     private Color debugGrappleColour = Color.white;
 
+    bool doCalc;
+
     float relativePosition; //The float that holds the result of the dot product to determine where the grapple is relative to the car
     float turnMultiplier; //The float used to make the rotationAngle positive or negative, making it turn correctly for left and right
     Vector2 velocity; //Finding velocity for turnMultiplier checks (forwards and backwards changes rotation)
     Vector3 localVelocity;
+    Vector2 localVector;
 
     void Awake()
     {
@@ -29,29 +32,40 @@ public class GrapplingHook : MonoBehaviour
         springJoint = GetComponent<SpringJoint2D>();
         rb = GetComponent<Rigidbody2D>();
         lineRenderer = GetComponent<LineRenderer>();
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse0)) //When the mouse is pressed down (activating once), find the grapple point
-        {
-            var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Finds position of the mouse on the screen and defines a 'transform' variable
-            mouseWorldPos.z = 0; //Makes the point conform to the 2D plane
-            grapplePointObject.transform.position = mouseWorldPos; //Moves the grapple point to where the mouse was clicked
-            RaycastHit2D grapplePointRaycastHit = Physics2D.Raycast(transform.position, grapplePointObject.transform.position, grappleRayLength, grappleLayers);
-            Debug.DrawRay(transform.position, mouseWorldPos, debugGrappleColour, grappleLayers);
-
-            Debug.Log("Raycast hit at this location: " + grapplePointRaycastHit.transform.position);
-
-            //grapplePointObject.transform.position = grapplePointRaycastHit.transform.position;
-        }
+        doCalc = true;
     }
 
     void FixedUpdate()
     {
         if (Input.GetKey(KeyCode.Mouse0)) //While the mouse is held down, do the following physics calculations
         {
+            if (doCalc == true)
+            {
+                Vector3 carLocalVector = transform.InverseTransformDirection(transform.position);
+                Debug.Log(carLocalVector);
+                Vector3 grapplePointVector = gameObject.transform.position - grapplePointObject.transform.position;
+                float dotProduct = Vector3.Dot(grapplePointVector, carLocalVector);
+                velocity = rb.velocity;
+                localVelocity = transform.InverseTransformDirection(velocity);
+
+                if (dotProduct > 0)
+                {
+                    turnMultiplier = -1;
+                    Debug.Log("Grapple is below");
+                    doCalc = false;
+                }
+
+                else
+                {
+                    turnMultiplier = 1;
+                    Debug.Log("Grapple is above");
+                    doCalc = false;
+                }
+
+                doCalc = false;
+            }
+
             /* This function finds where the grapple is relative to the car, so it can calculate to turn clockwise or anti-clockwise
              * NOTE: It updates the position every frame, but to work properly it needs to only update once. 
              * However, putting it in Update under GetKeyDown(Mouse0) returns 0 always...
@@ -60,23 +74,6 @@ public class GrapplingHook : MonoBehaviour
              * PLEASE DEBUG AND FIX ISSUE WHEN POSSIBLE! IT'S INCREDIBLY VITAL!
              * -----------------------------------------------------------------------
              */
-            Vector2 grapplePointDot = grapplePointObject.transform.position - transform.position;
-            relativePosition = Vector2.Dot(transform.right, grapplePointDot);
-            Debug.Log(relativePosition);
-            velocity = rb.velocity;
-            localVelocity = transform.InverseTransformDirection(velocity);
-
-            if (relativePosition < 0 && localVelocity.x > 0 || relativePosition > 0 && localVelocity.x < 0)
-            {
-                turnMultiplier = -1;
-                Debug.Log(turnMultiplier);
-            }
-
-            else
-            {
-                turnMultiplier = 1;
-                Debug.Log(turnMultiplier);
-            }
 
             //Finds rotation angle for the RotateAround function with ***MATHS***
             float distanceRadius = springJoint.distance; //Finds grapple distance by reading the distance variable on the spring joint
@@ -99,7 +96,7 @@ public class GrapplingHook : MonoBehaviour
             Vector3 point = grapplePointObject.transform.position; //Assigns the grapple point position to a vector 3 for rotation
             transform.RotateAround(point, rotationMask, Time.fixedDeltaTime * -rotationAngle);
 
-            lineRendererPoints = new Vector3[]  { grapplePointObject.transform.position , gameObject.transform.position }; //Defines the start and end of the line
+            lineRendererPoints = new Vector3[] { grapplePointObject.transform.position, gameObject.transform.position }; //Defines the start and end of the line
             lineRenderer.SetPositions(lineRendererPoints); //Sets the positions to the previously defined positions
         }
 
@@ -108,6 +105,34 @@ public class GrapplingHook : MonoBehaviour
             //Disables the spring joint and line renderer
             springJoint.enabled = false;
             lineRenderer.enabled = false;
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        grapplePointObject.transform.rotation = transform.rotation;
+        
+        if (Input.GetMouseButtonDown(0))
+        {
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0)) //When the mouse is pressed down (activating once), find the grapple point
+        {
+            var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Finds position of the mouse on the screen and defines a 'transform' variable
+            mouseWorldPos.z = 0; //Makes the point conform to the 2D plane
+            grapplePointObject.transform.position = mouseWorldPos; //Moves the grapple point to where the mouse was clicked
+            RaycastHit2D grapplePointRaycastHit = Physics2D.Raycast(transform.position, grapplePointObject.transform.position, grappleRayLength, grappleLayers);
+            Debug.DrawRay(transform.position, mouseWorldPos, debugGrappleColour, grappleLayers);
+
+            Debug.Log("Raycast hit at this location: " + grapplePointRaycastHit.transform.position);
+
+            //grapplePointObject.transform.position = grapplePointRaycastHit.transform.position;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            doCalc = true;
         }
     }
 }

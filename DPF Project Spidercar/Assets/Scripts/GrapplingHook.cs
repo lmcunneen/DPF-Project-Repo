@@ -17,12 +17,16 @@ public class GrapplingHook : MonoBehaviour
     private Color debugGrappleColour = Color.white;
 
     bool doCalc;
+    private TurnDirectionGrappling turnScript;
 
     float relativePosition; //The float that holds the result of the dot product to determine where the grapple is relative to the car
     float turnMultiplier; //The float used to make the rotationAngle positive or negative, making it turn correctly for left and right
     Vector2 velocity; //Finding velocity for turnMultiplier checks (forwards and backwards changes rotation)
     Vector3 localVelocity;
-    Vector2 localVector;
+    bool positionTop;
+    bool positionBottom;
+    int topMask;
+    int bottomMask;
 
     void Awake()
     {
@@ -34,6 +38,10 @@ public class GrapplingHook : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
 
         doCalc = true;
+
+        topMask = 1 << 10;
+        bottomMask = 1 << 11;
+
     }
 
     void FixedUpdate()
@@ -42,7 +50,7 @@ public class GrapplingHook : MonoBehaviour
         {
             if (doCalc == true)
             {
-                Vector3 carLocalVector = transform.InverseTransformDirection(transform.position);
+                /*Vector3 carLocalVector = transform.InverseTransformDirection(transform.position);
                 Debug.Log(carLocalVector);
                 Vector3 grapplePointVector = gameObject.transform.position - grapplePointObject.transform.position;
                 float dotProduct = Vector3.Dot(grapplePointVector, carLocalVector);
@@ -62,18 +70,33 @@ public class GrapplingHook : MonoBehaviour
                     Debug.Log("Grapple is above");
                     doCalc = false;
                 }
+                */
+
+                positionTop = Physics.CheckBox(grapplePointObject.transform.position, new Vector2(1, 1), new Quaternion(0, 0, 0, 0), topMask);
+                positionBottom = Physics.CheckBox(grapplePointObject.transform.position, new Vector2(1, 1), new Quaternion(0, 0, 0, 0), bottomMask);
+
+                velocity = rb.velocity;
+                localVelocity = transform.InverseTransformDirection(velocity);
+
+                if (positionTop == true && positionBottom == false && localVelocity.x > 0 || positionTop == false && positionBottom == true && localVelocity.x < 0)
+                {
+                    turnMultiplier = 1;
+                }
+
+                else if (positionTop == true && positionBottom == false && localVelocity.x < 0 || positionTop == false && positionBottom == true && localVelocity.x > 0)
+                {
+                    turnMultiplier = -1;
+                }
+
+                else
+                {
+                    turnMultiplier = 0;
+                }
 
                 doCalc = false;
-            }
 
-            /* This function finds where the grapple is relative to the car, so it can calculate to turn clockwise or anti-clockwise
-             * NOTE: It updates the position every frame, but to work properly it needs to only update once. 
-             * However, putting it in Update under GetKeyDown(Mouse0) returns 0 always...
-             * And making a seperate if statement in the FixedUpdate, cancels out all the rotation for some unknown reason.
-             * -----------------------------------------------------------------------
-             * PLEASE DEBUG AND FIX ISSUE WHEN POSSIBLE! IT'S INCREDIBLY VITAL!
-             * -----------------------------------------------------------------------
-             */
+                Debug.Log("Turn calculation is done!");
+            }
 
             //Finds rotation angle for the RotateAround function with ***MATHS***
             float distanceRadius = springJoint.distance; //Finds grapple distance by reading the distance variable on the spring joint

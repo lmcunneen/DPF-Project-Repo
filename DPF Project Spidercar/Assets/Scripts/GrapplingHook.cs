@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GrapplingHook : MonoBehaviour
 {
+    public GameObject carObject;
     public GameObject grapplePointObject; //The game object that defines where the grapple hook is
     private SpringJoint2D springJoint; //The component that joins together the car and grapple point by a 'rope' essentially
     private Rigidbody2D rb; //The rigidbody component that calculates physics such as drag, mass and gravity
@@ -17,16 +19,20 @@ public class GrapplingHook : MonoBehaviour
     private Color debugGrappleColour = Color.white;
 
     bool doCalc;
-    private TurnDirectionGrappling turnScript;
 
-    float relativePosition; //The float that holds the result of the dot product to determine where the grapple is relative to the car
+    bool isAbove;
     float turnMultiplier; //The float used to make the rotationAngle positive or negative, making it turn correctly for left and right
     Vector2 velocity; //Finding velocity for turnMultiplier checks (forwards and backwards changes rotation)
     Vector3 localVelocity;
-    bool positionTop;
-    bool positionBottom;
+    bool grappleColliderTopCheck;
+    bool grappleColliderBottomCheck;
     int topMask;
     int bottomMask;
+    int grappleMask;
+    int grappleLayerValue;
+
+    public GameObject topCollider;
+    public GameObject bottomCollider;
 
     void Awake()
     {
@@ -39,9 +45,10 @@ public class GrapplingHook : MonoBehaviour
 
         doCalc = true;
 
-        topMask = 1 << 10;
-        bottomMask = 1 << 11;
-
+        topMask = 1 << LayerMask.GetMask("Top");
+        topMask = ~topMask;
+        bottomMask = 1 << LayerMask.GetMask("Bottom");
+        bottomMask = ~bottomMask;
     }
 
     void FixedUpdate()
@@ -72,30 +79,32 @@ public class GrapplingHook : MonoBehaviour
                 }
                 */
 
-                positionTop = Physics.CheckBox(grapplePointObject.transform.position, new Vector2(1, 1), new Quaternion(0, 0, 0, 0), topMask);
-                positionBottom = Physics.CheckBox(grapplePointObject.transform.position, new Vector2(1, 1), new Quaternion(0, 0, 0, 0), bottomMask);
+                var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Finds position of the mouse on the screen and defines a 'transform' variable
+                mouseWorldPos.z = 0;
 
-                velocity = rb.velocity;
-                localVelocity = transform.InverseTransformDirection(velocity);
+                grappleColliderTopCheck = topCollider.GetComponent<CheckIntersection>().IsObjectIntersecting(mouseWorldPos);
 
-                if (positionTop == true && positionBottom == false && localVelocity.x > 0 || positionTop == false && positionBottom == true && localVelocity.x < 0)
+                if (grappleColliderTopCheck == false)
                 {
-                    turnMultiplier = 1;
-                }
-
-                else if (positionTop == true && positionBottom == false && localVelocity.x < 0 || positionTop == false && positionBottom == true && localVelocity.x > 0)
-                {
-                    turnMultiplier = -1;
+                    grappleColliderBottomCheck = bottomCollider.GetComponent<CheckIntersection>().IsObjectIntersecting(mouseWorldPos);
                 }
 
                 else
                 {
-                    turnMultiplier = 0;
+                    grappleColliderBottomCheck = false;
                 }
+
+                Debug.Log("Top state: " + grappleColliderTopCheck);
+                Debug.Log("Bottom state: " + grappleColliderBottomCheck);
+
+                velocity = rb.velocity;
+                localVelocity = transform.InverseTransformDirection(velocity);
+
+                FindTurnMultiplier(); //!!!!!Please fix later!!!!!
 
                 doCalc = false;
 
-                Debug.Log("Turn calculation is done!");
+                //Debug.Log("Turn calculation is done!");
             }
 
             //Finds rotation angle for the RotateAround function with ***MATHS***
@@ -117,7 +126,7 @@ public class GrapplingHook : MonoBehaviour
             //Handles Rotation Logic
             Vector3 rotationMask = new Vector3(0, 0, 1); //Only rotates on Z axis
             Vector3 point = grapplePointObject.transform.position; //Assigns the grapple point position to a vector 3 for rotation
-            transform.RotateAround(point, rotationMask, Time.fixedDeltaTime * -rotationAngle);
+            transform.RotateAround(point, rotationMask, Time.fixedDeltaTime * rotationAngle);
 
             lineRendererPoints = new Vector3[] { grapplePointObject.transform.position, gameObject.transform.position }; //Defines the start and end of the line
             lineRenderer.SetPositions(lineRendererPoints); //Sets the positions to the previously defined positions
@@ -128,6 +137,8 @@ public class GrapplingHook : MonoBehaviour
             //Disables the spring joint and line renderer
             springJoint.enabled = false;
             lineRenderer.enabled = false;
+
+            turnMultiplier = 0;
         }
     }
 
@@ -146,7 +157,7 @@ public class GrapplingHook : MonoBehaviour
             mouseWorldPos.z = 0; //Makes the point conform to the 2D plane
             grapplePointObject.transform.position = mouseWorldPos; //Moves the grapple point to where the mouse was clicked
             RaycastHit2D grapplePointRaycastHit = Physics2D.Raycast(transform.position, grapplePointObject.transform.position, grappleRayLength, grappleLayers);
-            Debug.DrawRay(transform.position, mouseWorldPos, debugGrappleColour, grappleLayers);
+            Debug.DrawRay(transform.position, grapplePointObject.transform.position, debugGrappleColour, 1f);
 
             Debug.Log("Raycast hit at this location: " + grapplePointRaycastHit.transform.position);
 
@@ -156,6 +167,39 @@ public class GrapplingHook : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             doCalc = true;
+        }
+    }
+
+    void FindTurnMultiplier()
+    {
+        if (grappleColliderTopCheck == true)
+        {
+            isAbove = true;
+        }
+
+        else if (grappleColliderBottomCheck == true)
+        {
+            isAbove = false;
+        }
+
+        else if (grappleColliderTopCheck == true && grappleColliderBottomCheck == true)
+        {
+            Debug.LogWarning("Both checks are true for some reason!!!!!!!!");
+        }
+
+        if (isAbove == true)
+        {
+            turnMultiplier = 1;
+        }
+
+        if (isAbove == false)
+        {
+            turnMultiplier = -1;
+        }
+
+        if (grappleColliderTopCheck == false && grappleColliderBottomCheck == false)
+        {
+            turnMultiplier = 0;
         }
     }
 }

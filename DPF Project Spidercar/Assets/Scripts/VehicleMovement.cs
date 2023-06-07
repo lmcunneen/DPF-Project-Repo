@@ -9,6 +9,7 @@ public class VehicleMovement : MonoBehaviour
     [SerializeField] private float forwardSpeed = 500;
     [SerializeField] private float reverseSpeed = 300;
     Rigidbody2D rigidBody;
+    bool breakState;
 
     void Start()
     {
@@ -23,14 +24,38 @@ public class VehicleMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (!Input.GetKey(KeyCode.Mouse0))
         {
-            rigidBody.AddForce(-transform.up * reverseSpeed * Time.fixedDeltaTime);
+            if (Input.GetKey(KeyCode.Space))
+            {
+                rigidBody.AddForce(-transform.up * reverseSpeed * Time.fixedDeltaTime);
+                breakState = true;
+            }
+
+            else
+            {
+                rigidBody.AddForce(transform.up * forwardSpeed * Time.fixedDeltaTime);
+                breakState = false;
+            }
         }
-        
+
         else
         {
-            rigidBody.AddForce(transform.up * forwardSpeed * Time.fixedDeltaTime);
+            if (breakState == true)
+            {
+                rigidBody.AddForce(-transform.up * reverseSpeed * Time.fixedDeltaTime);
+                breakState = true;
+            }
+
+            else if (breakState == false)
+            {
+                rigidBody.AddForce(transform.up * forwardSpeed * Time.fixedDeltaTime);
+            }
+
+            else
+            {
+                Debug.LogError("Vehicle Movement broke!");
+            }
         }
     }
 }

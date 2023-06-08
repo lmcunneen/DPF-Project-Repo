@@ -1,22 +1,50 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CheckIntersection : MonoBehaviour
 {
-    public GameObject debugShape;
+    public GameObject grapplePoint; //Only for debugging
+    private Collider2D hitCollider;
+    public LayerMask layerMask;
+    private Vector3 objectSize;
+    bool hasStarted;
 
-    public bool IsObjectIntersecting(Vector2 positionToCheck)
+    private void Start()
     {
-        debugShape.transform.position = positionToCheck;
-        
-        var collider = GetComponent<BoxCollider2D>();
-        
-        if (collider.bounds.Contains(debugShape.transform.position))
+        hasStarted = true;
+    }
+
+    public bool IsObjectIntersecting()
+    {
+        objectSize = transform.localScale;
+        objectSize.x = Mathf.Abs(objectSize.x);
+        objectSize.y = Mathf.Abs(objectSize.y);
+        objectSize.z = 100;
+
+        hitCollider = Physics2D.OverlapBox(gameObject.transform.position, objectSize / 2, transform.rotation.z, layerMask);
+
+        Debug.Log(transform.rotation.z);
+
+        if (hitCollider != null)
         {
+            hitCollider = null;
             return true;
         }
 
-        return false;
+        else
+        {
+            return false;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (hasStarted)
+        {
+            Gizmos.DrawWireCube(gameObject.transform.position, objectSize);
+        }
     }
 }

@@ -5,18 +5,14 @@ using UnityEngine;
 
 public class GrapplingHook : MonoBehaviour
 {
-    public GameObject carObject;
     public GameObject grapplePointObject; //The game object that defines where the grapple hook is
+    private GameObject breakGrappleManager;
     private SpringJoint2D springJoint; //The component that joins together the car and grapple point by a 'rope' essentially
     private Rigidbody2D rb; //The rigidbody component that calculates physics such as drag, mass and gravity
     private LineRenderer lineRenderer; //The component that draws the rope between the grapple and the car
     private Vector3[] lineRendererPoints; //Array of the points the line renderer conforms to
 
     float piFloat; //Used for circumference calculations. 
-
-    private float grappleRayLength;
-    public LayerMask grappleLayers; //Filters only Walls and Poles for grappling raycast
-    private Color debugGrappleColour = Color.white;
 
     bool doCalc;
 
@@ -33,11 +29,11 @@ public class GrapplingHook : MonoBehaviour
 
     public GameObject topCollider;
     public GameObject bottomCollider;
+    public GameObject positionChecker;
 
     void Awake()
     {
         piFloat = 3.141592f;
-        grappleRayLength = 10f;
 
         springJoint = GetComponent<SpringJoint2D>();
         rb = GetComponent<Rigidbody2D>();
@@ -55,44 +51,27 @@ public class GrapplingHook : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Mouse0)) //While the mouse is held down, do the following physics calculations
         {
+            //breakGrappleManager = FindObjectOfType<BreakGrapple>();
+
             if (doCalc == true)
             {
-                /*Vector3 carLocalVector = transform.InverseTransformDirection(transform.position);
-                Debug.Log(carLocalVector);
-                Vector3 grapplePointVector = gameObject.transform.position - grapplePointObject.transform.position;
-                float dotProduct = Vector3.Dot(grapplePointVector, carLocalVector);
-                velocity = rb.velocity;
-                localVelocity = transform.InverseTransformDirection(velocity);
-
-                if (dotProduct > 0)
-                {
-                    turnMultiplier = -1;
-                    Debug.Log("Grapple is below");
-                    doCalc = false;
-                }
-
-                else
-                {
-                    turnMultiplier = 1;
-                    Debug.Log("Grapple is above");
-                    doCalc = false;
-                }
-                */
-
                 var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Finds position of the mouse on the screen and defines a 'transform' variable
                 mouseWorldPos.z = 0;
 
-                grappleColliderTopCheck = topCollider.GetComponent<CheckIntersection>().IsObjectIntersecting(mouseWorldPos);
+                positionChecker.transform.localPosition = mouseWorldPos;
 
-                if (grappleColliderTopCheck == false)
+                grappleColliderTopCheck = topCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
+                grappleColliderBottomCheck = bottomCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
+
+                /*if (grappleColliderTopCheck == false)
                 {
-                    grappleColliderBottomCheck = bottomCollider.GetComponent<CheckIntersection>().IsObjectIntersecting(mouseWorldPos);
+                    grappleColliderBottomCheck = bottomCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
                 }
 
                 else
                 {
                     grappleColliderBottomCheck = false;
-                }
+                }*/
 
                 Debug.Log("Top state: " + grappleColliderTopCheck);
                 Debug.Log("Bottom state: " + grappleColliderBottomCheck);
@@ -107,29 +86,7 @@ public class GrapplingHook : MonoBehaviour
                 //Debug.Log("Turn calculation is done!");
             }
 
-            //Finds rotation angle for the RotateAround function with ***MATHS***
-            float distanceRadius = springJoint.distance; //Finds grapple distance by reading the distance variable on the spring joint
-            float vehicleVelocity = rb.velocity.magnitude; //Finds current vehicle velocity
-            //Now the calculations are made
-            float grappleCircumference = 2 * piFloat * distanceRadius; //Finds circumference of turning circle (distance)
-            float fullRotationTime = grappleCircumference / vehicleVelocity; //Finds the time it would take to finish the circle. Unsure of what measurement of time it would refer to...
-            float segmentTimePerUpdate = fullRotationTime * Time.fixedDeltaTime; //This doesn't work, as it rounds down the number to small, making the result to miniscule. Return to this and fix it
-            float rotationAngle = (360 / (segmentTimePerUpdate * 50)) * turnMultiplier; //Determines the angle (still needs more work to accurately find it) and filters it through the turnMultiplier
-
-            //Debug.Log("VELOCITY: " + vehicleVelocity);
-            //Debug.Log(grappleCircumference + " / " + vehicleVelocity + " = " + fullRotationTime);
-            //Debug.Log(rotationAngle);
-
-            //Enables the spring joint and line renderer
-            springJoint.enabled = true;
-            lineRenderer.enabled = true;
-            //Handles Rotation Logic
-            Vector3 rotationMask = new Vector3(0, 0, 1); //Only rotates on Z axis
-            Vector3 point = grapplePointObject.transform.position; //Assigns the grapple point position to a vector 3 for rotation
-            transform.RotateAround(point, rotationMask, Time.fixedDeltaTime * rotationAngle);
-
-            lineRendererPoints = new Vector3[] { grapplePointObject.transform.position, gameObject.transform.position }; //Defines the start and end of the line
-            lineRenderer.SetPositions(lineRendererPoints); //Sets the positions to the previously defined positions
+            TurnCalculations();
         }
 
         else //When LMB is let go, do the following...
@@ -146,22 +103,12 @@ public class GrapplingHook : MonoBehaviour
     void Update()
     {
         grapplePointObject.transform.rotation = transform.rotation;
-        
-        if (Input.GetMouseButtonDown(0))
-        {
-        }
 
         if (Input.GetKeyDown(KeyCode.Mouse0)) //When the mouse is pressed down (activating once), find the grapple point
         {
             var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Finds position of the mouse on the screen and defines a 'transform' variable
             mouseWorldPos.z = 0; //Makes the point conform to the 2D plane
             grapplePointObject.transform.position = mouseWorldPos; //Moves the grapple point to where the mouse was clicked
-            RaycastHit2D grapplePointRaycastHit = Physics2D.Raycast(transform.position, grapplePointObject.transform.position, grappleRayLength, grappleLayers);
-            Debug.DrawRay(transform.position, grapplePointObject.transform.position, debugGrappleColour, 1f);
-
-            Debug.Log("Raycast hit at this location: " + grapplePointRaycastHit.transform.position);
-
-            //grapplePointObject.transform.position = grapplePointRaycastHit.transform.position;
         }
 
         if (Input.GetKeyUp(KeyCode.Mouse0))
@@ -202,6 +149,33 @@ public class GrapplingHook : MonoBehaviour
             turnMultiplier = 0;
         }
     }
+
+    void TurnCalculations()
+    {
+        //Finds rotation angle for the RotateAround function with ***MATHS***
+        float distanceRadius = springJoint.distance; //Finds grapple distance by reading the distance variable on the spring joint
+        float vehicleVelocity = rb.velocity.magnitude; //Finds current vehicle velocity
+                                                       //Now the calculations are made
+        float grappleCircumference = 2 * piFloat * distanceRadius; //Finds circumference of turning circle (distance)
+        float fullRotationTime = grappleCircumference / vehicleVelocity; //Finds the time it would take to finish the circle. Unsure of what measurement of time it would refer to...
+        float segmentTimePerUpdate = fullRotationTime * Time.fixedDeltaTime; //This doesn't work, as it rounds down the number to small, making the result to miniscule. Return to this and fix it
+        float rotationAngle = (360 / (segmentTimePerUpdate * 50)) * turnMultiplier; //Determines the angle (still needs more work to accurately find it) and filters it through the turnMultiplier
+
+        //Debug.Log("VELOCITY: " + vehicleVelocity);
+        //Debug.Log(grappleCircumference + " / " + vehicleVelocity + " = " + fullRotationTime);
+        //Debug.Log(rotationAngle);
+
+        //Enables the spring joint and line renderer
+        springJoint.enabled = true;
+        lineRenderer.enabled = true;
+        //Handles Rotation Logic
+        Vector3 rotationMask = new Vector3(0, 0, 1); //Only rotates on Z axis
+        Vector3 point = grapplePointObject.transform.position; //Assigns the grapple point position to a vector 3 for rotation
+        transform.RotateAround(point, rotationMask, Time.fixedDeltaTime * rotationAngle);
+
+        lineRendererPoints = new Vector3[] { grapplePointObject.transform.position, gameObject.transform.position }; //Defines the start and end of the line
+        lineRenderer.SetPositions(lineRendererPoints); //Sets the positions to the previously defined positions
+    }
 }
 
 /* So the calculation code doesn't work as I intend it to... Here are some possible culprits, in order of troubleshooting priority:
@@ -235,7 +209,30 @@ public class GrapplingHook : MonoBehaviour
          
         directionToFace = pointToLookTo.transform.position - transform.position;
         Vector3 lookAtRotation = Quaternion.LookRotation(directionToFace).eulerAngles;
-        transform.rotation = Quaternion.Euler(Vector3.Scale(lookAtRotation, rotationMask)); */
+        transform.rotation = Quaternion.Euler(Vector3.Scale(lookAtRotation, rotationMask)); 
+
+        METHOD FOR FIGURING OUT DOT PRODUCT:
+            Vector3 carLocalVector = transform.InverseTransformDirection(transform.position);
+            Debug.Log(carLocalVector);
+            Vector3 grapplePointVector = gameObject.transform.position - grapplePointObject.transform.position;
+            float dotProduct = Vector3.Dot(grapplePointVector, carLocalVector);
+            velocity = rb.velocity;
+            localVelocity = transform.InverseTransformDirection(velocity);
+
+            if (dotProduct > 0)
+            {
+                turnMultiplier = -1;
+                    Debug.Log("Grapple is below");
+                    doCalc = false;
+                }
+
+                else
+                {
+                    turnMultiplier = 1;
+                    Debug.Log("Grapple is above");
+                    doCalc = false;
+                }
+*/
 
 /* IDEA THAT OSCAR SUGGESTED, TEST AT HOME:
  * The order of operations (ie when each update happens) is different than I originally thought

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DeathWave : MonoBehaviour
 {
+    Rigidbody2D rb;
     public float waveSpeed;
     public float maxWaveSpeed;
     float waveDirectionMask;
@@ -11,18 +12,16 @@ public class DeathWave : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        waveSpeed = .1f;
-        maxWaveSpeed = 2f;
-        waveDirectionMask = gameObject.transform.position.y;
+        rb = GetComponent<Rigidbody2D>();
+        maxWaveSpeed = 15f;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        if (true)
+        if (rb.velocity.magnitude < maxWaveSpeed)
         {
-            transform.Translate(Vector2.up * waveDirectionMask * waveSpeed);
-            waveDirectionMask += -196.9f;
+            rb.AddForce(Vector2.right * maxWaveSpeed);
         }
     }
 }

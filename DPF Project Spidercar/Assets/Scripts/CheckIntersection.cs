@@ -11,6 +11,7 @@ public class CheckIntersection : MonoBehaviour
     public LayerMask layerMask;
     private Vector3 objectSize;
     bool hasStarted;
+    float rotationAngle;
 
     private void Start()
     {
@@ -24,13 +25,15 @@ public class CheckIntersection : MonoBehaviour
         objectSize.y = Mathf.Abs(objectSize.y);
         objectSize.z = 100;
 
-        hitCollider = Physics2D.OverlapBox(gameObject.transform.position, objectSize / 2, transform.rotation.z, layerMask);
+        Quaternion ugh = transform.rotation;
+        rotationAngle = ugh.eulerAngles.z;
 
-        Debug.Log(transform.rotation.z);
+        hitCollider = Physics2D.OverlapBox(gameObject.transform.position, objectSize, rotationAngle, layerMask); // had /2 in objectSize
+
+        Debug.Log(rotationAngle + " " + hitCollider);
 
         if (hitCollider != null)
         {
-            hitCollider = null;
             return true;
         }
 

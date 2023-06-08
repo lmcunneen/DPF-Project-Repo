@@ -29,8 +29,10 @@ public class FindDistanceTravelled : MonoBehaviour
 
             if (roundedDistance > highestScore)
             {
+                StopAllCoroutines();
                 highestScore = roundedDistance;
                 UIManager.GetComponent<UpdateUIElement>().UpdateElementInt(roundedDistance, scoreCounter);
+                StartCoroutine(ColourFade());
             }
         }
 
@@ -38,5 +40,12 @@ public class FindDistanceTravelled : MonoBehaviour
         {
             distanceLength = 0;
         }
+    }
+
+    IEnumerator ColourFade()
+    {
+        scoreCounter.GetComponent<Text>().color = Color.red;
+        yield return new WaitForSeconds(3f);
+        scoreCounter.GetComponent<Text>().color = Color.grey;
     }
 }

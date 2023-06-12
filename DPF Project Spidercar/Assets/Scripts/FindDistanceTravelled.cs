@@ -31,7 +31,7 @@ public class FindDistanceTravelled : MonoBehaviour
             {
                 StopAllCoroutines();
                 highestScore = roundedDistance;
-                UIManager.GetComponent<UpdateUIElement>().UpdateElementInt(roundedDistance, scoreCounter);
+                UIManager.GetComponent<UpdateUIElement>().UpdateCounterInt(roundedDistance);
                 StartCoroutine(ColourFade());
             }
         }

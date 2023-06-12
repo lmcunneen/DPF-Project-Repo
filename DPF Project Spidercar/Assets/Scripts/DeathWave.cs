@@ -7,7 +7,8 @@ public class DeathWave : MonoBehaviour
     Rigidbody2D rb;
     public float waveSpeed;
     public float maxWaveSpeed;
-    float waveDirectionMask;
+
+    public GameObject gameManager;
     
     // Start is called before the first frame update
     void Start()
@@ -22,6 +23,17 @@ public class DeathWave : MonoBehaviour
         if (rb.velocity.magnitude < maxWaveSpeed)
         {
             rb.AddForce(Vector2.right * maxWaveSpeed);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision != null)
+        {
+            if (collision.gameObject.name == "Car Graphic")
+            {
+                gameManager.GetComponent<PlayerAliveChecker>().OnDeathFunction();
+            }
         }
     }
 }

@@ -37,6 +37,7 @@ public class PlayerAliveChecker : MonoBehaviour
             //Reenables the movement and grappling hook
             vehicle.GetComponent<VehicleMovement>().enabled = true;
             vehicle.GetComponent<GrapplingHook>().enabled = true;
+            vehicle.GetComponent<GrapplingHook>().grapplePointObject.SetActive(true);
             //Resets UI, highest stored score and counter text colour
             gameObject.GetComponent<UpdateUIElement>().ResetUI();
             carBumper.GetComponent<FindDistanceTravelled>().highestScore = 0;
@@ -49,6 +50,9 @@ public class PlayerAliveChecker : MonoBehaviour
         Debug.Log("Ack! Player am dead!");
         vehicle.GetComponent<VehicleMovement>().enabled = false;
         vehicle.GetComponent<GrapplingHook>().enabled = false;
+        vehicle.GetComponent<GrapplingHook>().springJoint.enabled = false;
+        vehicle.GetComponent<GrapplingHook>().grapplePointObject.SetActive(false);
+        vehicle.GetComponent<GrapplingHook>().lineRenderer.enabled = false;
         StartCoroutine(gameObject.GetComponent<UpdateUIElement>().DisplayDeathElements());
     }
 }

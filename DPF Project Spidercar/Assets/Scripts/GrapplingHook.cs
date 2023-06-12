@@ -7,9 +7,9 @@ public class GrapplingHook : MonoBehaviour
 {
     public GameObject grapplePointObject; //The game object that defines where the grapple hook is
     private GameObject breakGrappleManager;
-    private SpringJoint2D springJoint; //The component that joins together the car and grapple point by a 'rope' essentially
+    public SpringJoint2D springJoint; //The component that joins together the car and grapple point by a 'rope' essentially
     private Rigidbody2D rb; //The rigidbody component that calculates physics such as drag, mass and gravity
-    private LineRenderer lineRenderer; //The component that draws the rope between the grapple and the car
+    public LineRenderer lineRenderer; //The component that draws the rope between the grapple and the car
     private Vector3[] lineRendererPoints; //Array of the points the line renderer conforms to
 
     float piFloat; //Used for circumference calculations. 

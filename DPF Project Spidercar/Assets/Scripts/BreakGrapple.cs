@@ -7,12 +7,15 @@ public class BreakGrapple : MonoBehaviour
     /* SCRIPT FUNCTION:
      * Continually raycasts during grapple to determine if it is intersecting with anything...
      * Then breaks the grapple
+     * 
+     * TO DO:
+     *      Research more into raycasting to get a better picture of it
+     *      Make sure that is like the raycasting in the stealth game, so its once continous ray rather than hundreds of repeating ones
      */
 
     public GameObject grapplePointObject;
     public GameObject grappleOrigin;
     RaycastHit2D grapplePointRaycastHit;
-    bool doRaycast;
 
     private float grappleRayLength;
     public LayerMask grappleLayers; //Filters only Walls and Poles for grappling raycast
@@ -21,25 +24,25 @@ public class BreakGrapple : MonoBehaviour
     void Start()
     {
         grappleRayLength = 10f;
-        doRaycast = true;
     }
 
-    bool BreakGrappleFunc()
+    private void Update()
     {
-        if (doRaycast == true)
+        if (Input.GetKey(KeyCode.Mouse0))
         {
-            grapplePointRaycastHit = Physics2D.Raycast(grappleOrigin.transform.position, grapplePointObject.transform.position, grappleRayLength, grappleLayers);
-            Debug.DrawRay(grappleOrigin.transform.position, grapplePointObject.transform.position, debugGrappleColour, 1f);
+            BreakGrappleFunc();
         }
+    }
+
+    void BreakGrappleFunc()
+    {
+        grapplePointRaycastHit = Physics2D.Raycast(grappleOrigin.transform.position, grapplePointObject.transform.position, grappleRayLength, grappleLayers);
+        Debug.DrawRay(grappleOrigin.transform.position, grapplePointObject.transform.position, debugGrappleColour, 1f);
 
         if (grapplePointRaycastHit == true)
         {
-            doRaycast = false;
-
             Debug.Log("Raycast hit at this location: " + grapplePointRaycastHit.transform.position);
         }
-
-        return grapplePointRaycastHit;
 
         //grapplePointObject.transform.position = grapplePointRaycastHit.transform.position;
     }

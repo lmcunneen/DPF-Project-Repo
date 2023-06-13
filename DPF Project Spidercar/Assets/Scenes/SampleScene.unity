@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 306190}
   - component: {fileID: 306189}
   - component: {fileID: 306191}
+  - component: {fileID: 306192}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -196,6 +197,23 @@ MonoBehaviour:
   finalScoreText: {fileID: 206157392}
   deathBackground: {fileID: 2097554740}
   respawnActive: 0
+--- !u!114 &306192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e2aa0ecf2e67254aac8093ce5b9f43e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grapplePointObject: {fileID: 0}
+  grappleOrigin: {fileID: 0}
+  grappleLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!4 &4922902 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3258020960895227128, guid: 1b63b72d3b0a46d41bbc38798dd7ed28, type: 3}

@@ -7,8 +7,8 @@ public class FollowObject : MonoBehaviour
     /* SCRIPT FUNCTION:
      * Generalist script that makes one object conform to the position and rotation of another
      * 
-     * Primarily used for grappling hook calculations as many elements of the car are children of the car sprite...
-     * Making their transforms relative to the car and making some calculations difficult/impossible with current systems
+     * Primarily used for grappling hook calculations as many objects used for calculations are children of the car sprite...
+     * Making their transforms relative to the car, thereby making some calculations difficult/impossible (with current systems)
      */
 
     public GameObject objectToFollow;

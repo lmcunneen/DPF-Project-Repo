@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class BreakGrapple : MonoBehaviour
 {
+    /* SCRIPT FUNCTION:
+     * Continually raycasts during grapple to determine if it is intersecting with anything...
+     * Then breaks the grapple
+     */
+
     public GameObject grapplePointObject;
     public GameObject grappleOrigin;
     RaycastHit2D grapplePointRaycastHit;

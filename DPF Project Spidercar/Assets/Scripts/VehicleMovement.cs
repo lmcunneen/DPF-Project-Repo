@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class VehicleMovement : MonoBehaviour
 {
-    //VARIABLE DECLARATION//
+    /* SCRIPT FUNCTION:
+     * Holds functionality for vehicle movement, including car speed and reversing
+     * Also has extra functionality for stopping player input while grappling
+     */
 
+    //VARIABLE DECLARATION//
     [SerializeField] private float forwardSpeed = 500;
     [SerializeField] private float reverseSpeed = 300;
     Rigidbody2D rigidBody;

@@ -5,6 +5,15 @@ using UnityEngine;
 
 public class GrapplingHook : MonoBehaviour
 {
+    /* SCRIPT FUNCTION:
+     * Handles most logic used for the grappling hook, and this is all in one script because...
+     *  1. The forces and rotations can be exerted on the player car directly
+     *  2. Many of these variables are used in multiple areas of functionality within this script
+     * However, other functionality is consolidated like finding relative position of grapple point (CheckIntersection) and breaking the grappling hook around corners (BreakGrapple)
+     * 
+     * This code is difficult to read and maintain, so I will be cleaning up the formatting and such when I get the chance
+     */
+
     public GameObject grapplePointObject; //The game object that defines where the grapple hook is
     private GameObject breakGrappleManager;
     public SpringJoint2D springJoint; //The component that joins together the car and grapple point by a 'rope' essentially
@@ -177,65 +186,3 @@ public class GrapplingHook : MonoBehaviour
         lineRenderer.SetPositions(lineRendererPoints); //Sets the positions to the previously defined positions
     }
 }
-
-/* So the calculation code doesn't work as I intend it to... Here are some possible culprits, in order of troubleshooting priority:
-             * 1. General logic is incorrect and needs to be sanity checked!
-             *      I think this is incredibly likely, as my understanding of physics and applying forces is low, so researching and even breaking down
-             *      the problem to make sure the calculation logic is sound will help immensely
-             *      
-             * 2. vehicleVelocity magnitude is not a way to derive distance correctly!
-             *      This also feels likely, as I have no clue if comparing the two numbers is actually giving the result it should mathermatically. I'll
-             *      have to do some pen to paper, step by step calculations to find if this is true.
-             *      
-             * 3. Check all variables to see if there values are consistent and therefore comparable against eachother!
-             *      If the top two are fine, scumming through each variable to see what scale and measurements its operating on can help with seeing if
-             *      that is what is causing the discrepancies and errors.
-             */
-
-/* !!!!ARCHIVE METHODS FOR GRAPPLING HOOK LOGIC!!!!
-         * FIRST METHOD: 
-         * Correctly points towards the object, but also rotates the object to face downwards in 3D space, causing the sprite to seemiongly dissapear.
-         * Also has issue when it gets to the top of the object, as it begins to rotate the object 180 degrees in the y axis and starts to freak out
-         * So the second method was pursued
-         
-        directionToFace = pointToLookTo.transform.position - transform.position;
-        transform.rotation = Quaternion.LookRotation(directionToFace);
-
-        /* SECOND METHOD:
-         * Uses a handy rotation mask to isolate just the z axis rotation to allow for both issues to be theoretically solved
-         * However, this now prevents all rotations from occuring and makes the object face upwards and move in that direction
-         * This makes sense, as when no rotations are exerted onto the car, it will continue in the direction its facing
-         * But it doesn't make sense why the z axis rotations are not being applied
-         
-        directionToFace = pointToLookTo.transform.position - transform.position;
-        Vector3 lookAtRotation = Quaternion.LookRotation(directionToFace).eulerAngles;
-        transform.rotation = Quaternion.Euler(Vector3.Scale(lookAtRotation, rotationMask)); 
-
-        METHOD FOR FIGURING OUT DOT PRODUCT:
-            Vector3 carLocalVector = transform.InverseTransformDirection(transform.position);
-            Debug.Log(carLocalVector);
-            Vector3 grapplePointVector = gameObject.transform.position - grapplePointObject.transform.position;
-            float dotProduct = Vector3.Dot(grapplePointVector, carLocalVector);
-            velocity = rb.velocity;
-            localVelocity = transform.InverseTransformDirection(velocity);
-
-            if (dotProduct > 0)
-            {
-                turnMultiplier = -1;
-                    Debug.Log("Grapple is below");
-                    doCalc = false;
-                }
-
-                else
-                {
-                    turnMultiplier = 1;
-                    Debug.Log("Grapple is above");
-                    doCalc = false;
-                }
-*/
-
-/* IDEA THAT OSCAR SUGGESTED, TEST AT HOME:
- * The order of operations (ie when each update happens) is different than I originally thought
- * So stepping through line by line, finding exactly what I want to do when will be incredibly helpful
- * https://docs.unity3d.com/Manual/ExecutionOrder.html
- * Good luck future me! */

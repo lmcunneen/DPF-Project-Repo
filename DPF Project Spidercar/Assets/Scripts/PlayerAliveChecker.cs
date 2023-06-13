@@ -5,9 +5,9 @@ using UnityEngine;
 public class PlayerAliveChecker : MonoBehaviour
 {
     /* SCRIPT FUNCTION:
-     * Checks every frame to see if certain death conditions have been met...
+     * Holds function that when called, activates the death state
      * Then disables external components like the player movement scripts and the likes.
-     * Would also activate certain things like the game over screen, car explosion SFX, etc.
+     * Also activates certain things like the game over screen, car explosion SFX, etc.
      */
 
     public GameObject vehicle;
@@ -16,6 +16,7 @@ public class PlayerAliveChecker : MonoBehaviour
     public GameObject waveOrigin;
     public GameObject carBumper;
     public KeyCode respawnKey;
+    public int finalScore;
     private bool respawnActive;
 
     private void Start()
@@ -48,11 +49,14 @@ public class PlayerAliveChecker : MonoBehaviour
     public void OnDeathFunction()
     {
         Debug.Log("Ack! Player am dead!");
+        //Disables vehicle movement, grappling hook, and rendering components
         vehicle.GetComponent<VehicleMovement>().enabled = false;
         vehicle.GetComponent<GrapplingHook>().enabled = false;
         vehicle.GetComponent<GrapplingHook>().springJoint.enabled = false;
         vehicle.GetComponent<GrapplingHook>().grapplePointObject.SetActive(false);
         vehicle.GetComponent<GrapplingHook>().lineRenderer.enabled = false;
-        StartCoroutine(gameObject.GetComponent<UpdateUIElement>().DisplayDeathElements());
+        //Finds the final score for death screen
+        finalScore = carBumper.GetComponent<FindDistanceTravelled>().highestScore;
+        StartCoroutine(gameObject.GetComponent<UpdateUIElement>().DisplayDeathElements(finalScore));
     }
 }

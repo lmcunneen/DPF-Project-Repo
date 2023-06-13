@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class DeathWave : MonoBehaviour
 {
+    /* SCRIPT FUNCTION:
+     * Holds all functionality for the death wave, including movement and activating death state
+     */
+
     Rigidbody2D rb;
     public float waveSpeed;
     public float maxWaveSpeed;

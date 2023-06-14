@@ -11,12 +11,14 @@ public class CheckAndBreakGrapple : MonoBehaviour
 
     public GameObject grapplePointObject;
     public GameObject grappleOrigin;
+    public GameObject debugShape;
     RaycastHit2D grapplePointRaycastHit;
+    RaycastHit2D raycastLengthChecker;
     private Vector3 rayDirection;
 
     public float grappleRayLength;
     public LayerMask grappleLayers; //Filters only Walls and Poles for grappling raycast
-    //private Color debugGrappleColour = Color.white;
+    private Color debugGrappleColour = Color.white;
 
     void Start()
     {
@@ -44,5 +46,18 @@ public class CheckAndBreakGrapple : MonoBehaviour
         }
 
         //grapplePointObject.transform.position = grapplePointRaycastHit.transform.position;
+    }
+
+    public bool BreakGrappleFunc()
+    {
+        rayDirection = (grapplePointObject.transform.position - grappleOrigin.transform.position).normalized;
+
+        grapplePointRaycastHit = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection);
+        Debug.DrawRay(grappleOrigin.transform.position, rayDirection, debugGrappleColour, 1f);
+
+        raycastLengthChecker = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, grappleLayers);
+        debugShape.transform.position = raycastLengthChecker.point;
+
+        return true;
     }
 }

@@ -26,6 +26,7 @@ public class GrapplingHook : MonoBehaviour
     bool doCalc;
     bool grappleSuccess;
     public bool grappleState;
+    bool isBroken;
 
     bool isAbove;
     float turnMultiplier; //The float used to make the rotationAngle positive or negative, making it turn correctly for left and right
@@ -101,6 +102,8 @@ public class GrapplingHook : MonoBehaviour
             if (grappleSuccess == true)
             {
                 TurnCalculations();
+
+                isBroken = gameManager.GetComponent<CheckAndBreakGrapple>().BreakGrappleFunc();
             }
         }
 

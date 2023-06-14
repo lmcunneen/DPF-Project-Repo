@@ -59,6 +59,11 @@ public class UpdateUIElement : MonoBehaviour
             personalBestAnimator.Play("Personal Best"); //Makes it rotate left and right
 
             personalBestParent.transform.localScale = personalBestScale * 1.5f;
+
+            yield return new WaitForSeconds(2f);
+
+            respawnText.enabled = true;
+            respawnActive = true;
         }
 
         else
@@ -73,12 +78,12 @@ public class UpdateUIElement : MonoBehaviour
             personalBestText.SetActive(true);
             personalBestText.GetComponent<Text>().color = Color.cyan;
             personalBestAnimator.Play("PB Text Default"); //Makes it stationary
+
+            yield return new WaitForSeconds(1f);
+
+            respawnText.enabled = true;
+            respawnActive = true;
         }
-
-        yield return new WaitForSeconds(2f);
-
-        respawnText.enabled = true;
-        respawnActive = true;
     }
 
     public void ResetUI()

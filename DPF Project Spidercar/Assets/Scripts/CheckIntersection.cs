@@ -15,12 +15,11 @@ public class CheckIntersection : MonoBehaviour
     private Collider2D hitCollider;
     public LayerMask layerMask;
     private Vector3 objectSize;
-    bool hasStarted;
     float rotationAngle;
 
     private void Start()
     {
-        hasStarted = true;
+
     }
 
     public bool IsObjectIntersecting()
@@ -45,14 +44,6 @@ public class CheckIntersection : MonoBehaviour
         else
         {
             return false;
-        }
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (hasStarted)
-        {
-            Gizmos.DrawWireCube(gameObject.transform.position, objectSize);
         }
     }
 }

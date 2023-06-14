@@ -28,24 +28,24 @@ public class VehicleMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!Input.GetKey(KeyCode.Mouse0))
+        if (!Input.GetKey(KeyCode.Mouse0)) //Checks to see if player is not grappling, allowing them to freely reverse
         {
             if (Input.GetKey(KeyCode.Space))
             {
                 rigidBody.AddForce(-transform.up * reverseSpeed * Time.fixedDeltaTime);
-                breakState = true;
+                breakState = true; //Sets boolean as true to read when grappling
             }
 
             else
             {
                 rigidBody.AddForce(transform.up * forwardSpeed * Time.fixedDeltaTime);
-                breakState = false;
+                breakState = false; //Sets boolean as false to read when grappling
             }
         }
 
         else
         {
-            if (breakState == true)
+            if (breakState == true) //If they were breaking before they grappled, continue in that directions
             {
                 rigidBody.AddForce(-transform.up * reverseSpeed * Time.fixedDeltaTime);
                 breakState = true;

@@ -15,7 +15,7 @@ public class GrapplingHook : MonoBehaviour
      */
 
     public GameObject grapplePointObject; //The game object that defines where the grapple hook is
-    private GameObject breakGrappleManager;
+    public GameObject gameManager;
     public SpringJoint2D springJoint; //The component that joins together the car and grapple point by a 'rope' essentially
     private Rigidbody2D rb; //The rigidbody component that calculates physics such as drag, mass and gravity
     public LineRenderer lineRenderer; //The component that draws the rope between the grapple and the car
@@ -24,6 +24,7 @@ public class GrapplingHook : MonoBehaviour
     float piFloat; //Used for circumference calculations. 
 
     bool doCalc;
+    public bool grappleState;
 
     bool isAbove;
     float turnMultiplier; //The float used to make the rotationAngle positive or negative, making it turn correctly for left and right
@@ -31,10 +32,6 @@ public class GrapplingHook : MonoBehaviour
     Vector3 localVelocity;
     bool grappleColliderTopCheck;
     bool grappleColliderBottomCheck;
-    int topMask;
-    int bottomMask;
-    int grappleMask;
-    int grappleLayerValue;
 
     public GameObject topCollider;
     public GameObject bottomCollider;
@@ -50,52 +47,53 @@ public class GrapplingHook : MonoBehaviour
 
         doCalc = true;
 
-        topMask = 1 << LayerMask.GetMask("Top");
-        topMask = ~topMask;
-        bottomMask = 1 << LayerMask.GetMask("Bottom");
-        bottomMask = ~bottomMask;
+        grapplePointObject.GetComponent<SpriteRenderer>().enabled = false;
     }
 
     void FixedUpdate()
     {
         if (Input.GetKey(KeyCode.Mouse0)) //While the mouse is held down, do the following physics calculations
         {
-            //breakGrappleManager = FindObjectOfType<BreakGrapple>();
+            grappleState = gameManager.GetComponent<CheckAndBreakGrapple>().CheckGrappleFunc();
 
-            if (doCalc == true)
+            if (grappleState == true)
             {
-                var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Finds position of the mouse on the screen and defines a 'transform' variable
-                mouseWorldPos.z = 0;
+                grapplePointObject.GetComponent<SpriteRenderer>().enabled = true;
 
-                positionChecker.transform.localPosition = mouseWorldPos;
-
-                grappleColliderTopCheck = topCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
-                grappleColliderBottomCheck = bottomCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
-
-                /*if (grappleColliderTopCheck == false)
+                if (doCalc == true)
                 {
-                    grappleColliderBottomCheck = bottomCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
+                    var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Finds position of the mouse on the screen and defines a 'transform' variable
+                    mouseWorldPos.z = 0;
+
+                    positionChecker.transform.localPosition = mouseWorldPos;
+
+                    grappleColliderTopCheck = topCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
+
+                    if (grappleColliderTopCheck == false)
+                    {
+                        grappleColliderBottomCheck = bottomCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
+                    }
+
+                    else
+                    {
+                        grappleColliderBottomCheck = false;
+                    }
+
+                    Debug.Log("Top state: " + grappleColliderTopCheck);
+                    Debug.Log("Bottom state: " + grappleColliderBottomCheck);
+
+                    velocity = rb.velocity;
+                    localVelocity = transform.InverseTransformDirection(velocity);
+
+                    FindTurnMultiplier(); //!!!!!Please fix later!!!!!
+
+                    doCalc = false;
+
+                    //Debug.Log("Turn calculation is done!");
                 }
 
-                else
-                {
-                    grappleColliderBottomCheck = false;
-                }*/
-
-                Debug.Log("Top state: " + grappleColliderTopCheck);
-                Debug.Log("Bottom state: " + grappleColliderBottomCheck);
-
-                velocity = rb.velocity;
-                localVelocity = transform.InverseTransformDirection(velocity);
-
-                FindTurnMultiplier(); //!!!!!Please fix later!!!!!
-
-                doCalc = false;
-
-                //Debug.Log("Turn calculation is done!");
+                TurnCalculations();
             }
-
-            TurnCalculations();
         }
 
         else //When LMB is let go, do the following...
@@ -103,6 +101,7 @@ public class GrapplingHook : MonoBehaviour
             //Disables the spring joint and line renderer
             springJoint.enabled = false;
             lineRenderer.enabled = false;
+            grapplePointObject.GetComponent<SpriteRenderer>().enabled = false;
 
             turnMultiplier = 0;
         }

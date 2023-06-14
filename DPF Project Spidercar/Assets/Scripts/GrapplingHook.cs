@@ -24,6 +24,7 @@ public class GrapplingHook : MonoBehaviour
     float piFloat; //Used for circumference calculations. 
 
     bool doCalc;
+    bool grappleSuccess;
     public bool grappleState;
 
     bool isAbove;
@@ -54,14 +55,16 @@ public class GrapplingHook : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Mouse0)) //While the mouse is held down, do the following physics calculations
         {
-            grappleState = gameManager.GetComponent<CheckAndBreakGrapple>().CheckGrappleFunc();
-
-            if (grappleState == true)
+            if (doCalc == true)
             {
-                grapplePointObject.GetComponent<SpriteRenderer>().enabled = true;
+                grappleState = gameManager.GetComponent<CheckAndBreakGrapple>().CheckGrappleFunc();
 
-                if (doCalc == true)
+                if (grappleState == true)
                 {
+                    grappleSuccess = true;
+
+                    grapplePointObject.GetComponent<SpriteRenderer>().enabled = true;
+
                     var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Finds position of the mouse on the screen and defines a 'transform' variable
                     mouseWorldPos.z = 0;
 
@@ -87,11 +90,16 @@ public class GrapplingHook : MonoBehaviour
 
                     FindTurnMultiplier(); //!!!!!Please fix later!!!!!
 
-                    doCalc = false;
+                    
 
                     //Debug.Log("Turn calculation is done!");
                 }
+            }
 
+            doCalc = false;
+
+            if (grappleSuccess == true)
+            {
                 TurnCalculations();
             }
         }
@@ -104,6 +112,7 @@ public class GrapplingHook : MonoBehaviour
             grapplePointObject.GetComponent<SpriteRenderer>().enabled = false;
 
             turnMultiplier = 0;
+            grappleSuccess = false;
         }
     }
 

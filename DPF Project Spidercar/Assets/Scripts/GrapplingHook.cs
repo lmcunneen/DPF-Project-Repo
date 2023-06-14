@@ -101,9 +101,17 @@ public class GrapplingHook : MonoBehaviour
 
             if (grappleSuccess == true)
             {
-                TurnCalculations();
-
                 isBroken = gameManager.GetComponent<CheckAndBreakGrapple>().BreakGrappleFunc();
+
+                if (isBroken == false)
+                {
+                    TurnCalculations();
+                }
+
+                else
+                {
+                    EndGrapple();
+                }
             }
         }
 

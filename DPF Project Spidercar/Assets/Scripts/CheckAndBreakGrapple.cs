@@ -58,6 +58,17 @@ public class CheckAndBreakGrapple : MonoBehaviour
         raycastLengthChecker = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, grappleLayers);
         debugShape.transform.position = raycastLengthChecker.point;
 
-        return true;
+        float hitDistance = Vector2.Distance(grapplePointObject.transform.position, debugShape.transform.position);
+        Debug.Log(hitDistance);
+
+        if (hitDistance > 4f)
+        {
+            return false;
+        }
+
+        else
+        {
+            return true;
+        }
     }
 }

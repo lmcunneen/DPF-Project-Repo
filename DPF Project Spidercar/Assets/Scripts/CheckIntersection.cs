@@ -34,7 +34,7 @@ public class CheckIntersection : MonoBehaviour
 
         hitCollider = Physics2D.OverlapBox(gameObject.transform.position, objectSize, rotationAngle, layerMask); // had /2 in objectSize
 
-        Debug.Log(rotationAngle + " " + hitCollider);
+        //Debug.Log(rotationAngle + " " + hitCollider);
 
         if (hitCollider != null)
         {

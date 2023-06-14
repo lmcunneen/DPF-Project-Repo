@@ -15,7 +15,7 @@ public class GrapplingHook : MonoBehaviour
      */
 
     public GameObject grapplePointObject; //The game object that defines where the grapple hook is
-    public GameObject gameManager;
+    public GameObject gameManager; //The game object that holds scripts that run many external systems
     public SpringJoint2D springJoint; //The component that joins together the car and grapple point by a 'rope' essentially
     private Rigidbody2D rb; //The rigidbody component that calculates physics such as drag, mass and gravity
     public LineRenderer lineRenderer; //The component that draws the rope between the grapple and the car
@@ -106,13 +106,7 @@ public class GrapplingHook : MonoBehaviour
 
         else //When LMB is let go, do the following...
         {
-            //Disables the spring joint and line renderer
-            springJoint.enabled = false;
-            lineRenderer.enabled = false;
-            grapplePointObject.GetComponent<SpriteRenderer>().enabled = false;
-
-            turnMultiplier = 0;
-            grappleSuccess = false;
+            EndGrapple();
         }
     }
 
@@ -192,5 +186,16 @@ public class GrapplingHook : MonoBehaviour
 
         lineRendererPoints = new Vector3[] { grapplePointObject.transform.position, gameObject.transform.position }; //Defines the start and end of the line
         lineRenderer.SetPositions(lineRendererPoints); //Sets the positions to the previously defined positions
+    }
+
+    void EndGrapple()
+    {
+        //Disables the spring joint and line renderer
+        springJoint.enabled = false;
+        lineRenderer.enabled = false;
+        grapplePointObject.GetComponent<SpriteRenderer>().enabled = false;
+
+        turnMultiplier = 0;
+        grappleSuccess = false;
     }
 }

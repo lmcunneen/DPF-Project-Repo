@@ -24,7 +24,7 @@ public class GrapplingHook : MonoBehaviour
     float piFloat; //Used for circumference calculations. 
 
     bool doCalc;
-    bool grappleSuccess;
+    public bool grappleSuccess;
     public bool grappleState;
     bool isBroken;
     public bool brokenDistanceCheck; //Unused boolean that was supposed to ignore the first calculation of the broken distance, but didn't. Archived for future debugging

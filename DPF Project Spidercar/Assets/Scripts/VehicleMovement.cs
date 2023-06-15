@@ -14,21 +14,28 @@ public class VehicleMovement : MonoBehaviour
     [SerializeField] private float reverseSpeed = 300;
     Rigidbody2D rigidBody;
     bool breakState;
+    bool grappleSuccess;
 
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
+        grappleSuccess = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            grappleSuccess = false;
+        }
     }
 
     void FixedUpdate()
     {
-        if (!Input.GetKey(KeyCode.Mouse0)) //Checks to see if player is not grappling, allowing them to freely reverse
+        grappleSuccess = gameObject.GetComponent<GrapplingHook>().grappleSuccess;
+        
+        if (grappleSuccess == false) //Checks to see if player is not grappling, allowing them to freely reverse if not
         {
             if (Input.GetKey(KeyCode.Space))
             {
@@ -43,12 +50,11 @@ public class VehicleMovement : MonoBehaviour
             }
         }
 
-        else
+        else //If they were breaking before they grappled, continue in that directions
         {
-            if (breakState == true) //If they were breaking before they grappled, continue in that directions
+            if (breakState == true)
             {
                 rigidBody.AddForce(-transform.up * reverseSpeed * Time.fixedDeltaTime);
-                breakState = true;
             }
 
             else if (breakState == false)

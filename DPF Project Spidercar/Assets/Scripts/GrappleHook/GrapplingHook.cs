@@ -22,14 +22,12 @@ public class GrapplingHook : MonoBehaviour
 
     private bool doCalc; //Allows for certain calculations in FixedUpdate to only run once
 
-    public bool grappleSuccess; //Bool that returns true if grapple is successful. Referenced in this and other scripts
     public bool grappleState; //Referenced bool from CheckAndBreakGrapple script, to see if raycast was successful
     private bool isBroken; //Referenced bool from CheckAndBreakGrapple script, to see if grapple is deemed broken
     public bool brokenDistanceCheck; //Unused boolean that was supposed to ignore the first calculation of the broken distance, but didn't. Archived for future debugging
 
     public GameObject topCollider;
     public GameObject bottomCollider;
-    public GameObject positionChecker;
     private Vector2 velocity; //Finding velocity for turnMultiplier checks (forwards and backwards changes rotation)
     private Vector3 localVelocity; //CURRENTLY UNUSED VARIABLE THAT WILL LATER HOLD FUNCTIONALITY FOR DETERMINING RELATIVE DIRECTION, AS A WORKING METHOD HAS NOT BEEN FOUND YET!!!!!!
     private bool grappleColliderTopCheck; //Bool that returns holds state for the TOP collider's CheckIntersection calculations
@@ -62,16 +60,17 @@ public class GrapplingHook : MonoBehaviour
         {
             if (doCalc == true)
             {
+                mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Finds position of the mouse on the screen and defines a 'transform' variable
+                mouseWorldPos.z = 0; //Makes the point conform to the 2D plane
+                grapplePointObject.transform.position = mouseWorldPos; //Moves the grapple point to where the mouse was clicked
+
                 grappleState = gameManager.GetComponent<CheckAndBreakGrapple>().CheckGrappleFunc();
 
                 if (grappleState == true)
                 {
-                    grappleSuccess = true;
                     brokenDistanceCheck = false;
 
                     grapplePointObject.GetComponent<SpriteRenderer>().enabled = true;
-
-                    positionChecker.transform.localPosition = mouseWorldPos;
 
                     grappleColliderTopCheck = topCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
 
@@ -99,7 +98,7 @@ public class GrapplingHook : MonoBehaviour
 
             doCalc = false;
 
-            if (grappleSuccess == true)
+            if (grappleState == true)
             {
                 isBroken = gameManager.GetComponent<CheckAndBreakGrapple>().BreakGrappleFunc();
 
@@ -127,9 +126,10 @@ public class GrapplingHook : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0)) //When the mouse is pressed down (activating once), find the grapple point
         {
-            mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Finds position of the mouse on the screen and defines a 'transform' variable
+            /*mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Finds position of the mouse on the screen and defines a 'transform' variable
             mouseWorldPos.z = 0; //Makes the point conform to the 2D plane
             grapplePointObject.transform.position = mouseWorldPos; //Moves the grapple point to where the mouse was clicked
+            */
         }
 
         if (Input.GetKeyUp(KeyCode.Mouse0))
@@ -207,6 +207,6 @@ public class GrapplingHook : MonoBehaviour
         grapplePointObject.GetComponent<SpriteRenderer>().enabled = false;
 
         turnMultiplier = 0;
-        grappleSuccess = false;
+        grappleState = false;
     }
 }

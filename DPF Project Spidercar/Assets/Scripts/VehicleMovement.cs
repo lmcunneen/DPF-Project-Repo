@@ -32,7 +32,7 @@ public class VehicleMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        grappleSuccess = gameObject.GetComponent<GrapplingHook>().grappleSuccess;
+        grappleSuccess = gameObject.GetComponent<GrapplingHook>().grappleState;
         
         if (grappleSuccess == false) //Checks to see if player is not grappling, allowing them to freely reverse if not
         {

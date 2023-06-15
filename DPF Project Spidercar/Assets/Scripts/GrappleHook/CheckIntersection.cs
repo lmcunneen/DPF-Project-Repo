@@ -13,27 +13,23 @@ public class CheckIntersection : MonoBehaviour
 
     private Collider2D hitCollider;
     public LayerMask layerMask;
-    private Vector3 objectSize;
+    private Vector3 boxSize;
+    private Quaternion boxQuaternion;
     float rotationAngle;
-
-    private void Start()
-    {
-
-    }
 
     public bool IsObjectIntersecting()
     {
-        objectSize = transform.localScale;
-        objectSize.x = Mathf.Abs(objectSize.x);
-        objectSize.y = Mathf.Abs(objectSize.y);
-        objectSize.z = 100;
+        boxSize = transform.localScale;
+        boxSize.x = Mathf.Abs(boxSize.x);
+        boxSize.y = Mathf.Abs(boxSize.y);
+        boxSize.z = 10;
 
-        Quaternion ugh = transform.rotation;
-        rotationAngle = ugh.eulerAngles.z;
+        boxQuaternion = transform.rotation;
+        rotationAngle = boxQuaternion.eulerAngles.z;
 
-        hitCollider = Physics2D.OverlapBox(gameObject.transform.position, objectSize, rotationAngle, layerMask); // had /2 in objectSize
+        hitCollider = Physics2D.OverlapBox(gameObject.transform.position, boxSize, rotationAngle, layerMask);
 
-        //Debug.Log(rotationAngle + " " + hitCollider);
+        Debug.Log(rotationAngle + " " + hitCollider);
 
         if (hitCollider != null)
         {

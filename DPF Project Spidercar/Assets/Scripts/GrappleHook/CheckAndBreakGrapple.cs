@@ -57,7 +57,7 @@ public class CheckAndBreakGrapple : MonoBehaviour
 
     public bool BreakGrappleFunc()
     {
-        rayDirection = (grapplePointObject.transform.position - grappleOrigin.transform.position);
+        rayDirection = (grapplePointObject.transform.position - grappleOrigin.transform.position).normalized;
 
         grapplePointRaycastHit = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, grappleLayersInverse);
         Debug.DrawRay(grappleOrigin.transform.position, rayDirection, debugGrappleColour, 1f);
@@ -66,7 +66,7 @@ public class CheckAndBreakGrapple : MonoBehaviour
         debugShape.transform.position = raycastLengthChecker.point;
 
         float hitDistance = Vector2.Distance(grapplePointRaycastHit.point, raycastLengthChecker.point);
-        Debug.Log("Distance between break: " + hitDistance);
+        //Debug.Log("Distance between break: " + hitDistance);
 
         return false; //Debug line that stops the check, showing that the intersection is working
 

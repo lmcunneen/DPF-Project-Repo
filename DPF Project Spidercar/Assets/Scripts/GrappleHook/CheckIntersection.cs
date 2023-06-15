@@ -11,7 +11,6 @@ public class CheckIntersection : MonoBehaviour
      * This is used to determine the relative position of the grappling hook for turn multiplier calculations
      */
 
-    public GameObject grapplePoint; //Only for debugging
     private Collider2D hitCollider;
     public LayerMask layerMask;
     private Vector3 objectSize;

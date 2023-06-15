@@ -13,8 +13,8 @@ public class VehicleMovement : MonoBehaviour
     [SerializeField] private float forwardSpeed = 500;
     [SerializeField] private float reverseSpeed = 300;
     Rigidbody2D rigidBody;
-    bool breakState;
-    bool grappleSuccess;
+    bool breakState; //Used to determine if the player was breaking or not before grappling
+    bool grappleSuccess; //Used to see if control should be suspended if grapple would be successful
 
     void Start()
     {
@@ -22,7 +22,6 @@ public class VehicleMovement : MonoBehaviour
         grappleSuccess = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyUp(KeyCode.Mouse0))

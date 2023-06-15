@@ -14,30 +14,25 @@ public class DeathWave : MonoBehaviour
 
     public GameObject gameManager;
     
-    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         maxWaveSpeed = 15f;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
-        if (rb.velocity.magnitude < maxWaveSpeed)
+        if (rb.velocity.magnitude < maxWaveSpeed) //If the wave is moving less than its max speed...
         {
-            rb.AddForce(Vector2.right * maxWaveSpeed);
+            rb.AddForce(Vector2.right * maxWaveSpeed); //Move the wave to the right
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision != null)
+        if (collision.gameObject.name == "Car Graphic") //If the collider is under the player, execute the death function
         {
-            if (collision.gameObject.name == "Car Graphic")
-            {
-                gameManager.GetComponent<PlayerAliveChecker>().OnDeathFunction();
-            }
+            gameManager.GetComponent<PlayerAliveChecker>().OnDeathFunction();
         }
     }
 }

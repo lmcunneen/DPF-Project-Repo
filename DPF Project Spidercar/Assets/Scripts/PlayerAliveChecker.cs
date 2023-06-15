@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerAliveChecker : MonoBehaviour
 {
     /* SCRIPT FUNCTION:
-     * Holds function that when called, activates the death state
+     * Holds function that when called, activates the death state (OnDeathFunction) and respawn logic (in Update)
      * Then disables external components like the player movement scripts and the likes.
      * Also activates certain things like the game over screen, car explosion SFX, etc.
      */
@@ -15,7 +15,7 @@ public class PlayerAliveChecker : MonoBehaviour
     public GameObject deathWave;
     public GameObject waveOrigin;
     public GameObject carBumper;
-    public KeyCode respawnKey;
+    public KeyCode respawnKey; //Set as 'R' in the inspector
     public int finalScore;
     private bool respawnActive;
 

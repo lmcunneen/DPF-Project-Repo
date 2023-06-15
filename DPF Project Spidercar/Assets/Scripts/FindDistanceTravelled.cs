@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,31 +13,29 @@ public class FindDistanceTravelled : MonoBehaviour
     public GameObject startingPoint;
     public GameObject UIManager;
     public Text scoreCounter;
-    public float distanceLength;
-    public int roundedDistance;
-    public int highestScore;
-    private string scoreString;
+    public float distanceLength; //Float that holds the precise distance of player from origin
+    public int roundedDistance; //The current distance/score of the player rounded down to nearest whole number
+    public int highestScore; //Saved score of player's highest score during this play session
+    private string scoreString; //The string that is plugged into the UpdateCounterInt function on external script
     
-    // Start is called before the first frame update
     void Start()
     {
         scoreString = "Score: ";
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (gameObject.transform.position.x > startingPoint.transform.position.x)
         {
             distanceLength = gameObject.transform.position.x - startingPoint.transform.position.x;
-            roundedDistance = (int)distanceLength;
+            roundedDistance = (int)distanceLength; //Rounds down distanceLength and stores that into roundedDistance for displaying
 
-            if (roundedDistance > highestScore)
+            if (roundedDistance > highestScore) //If the new score is higher than the previous displayed score, do the following
             {
-                StopAllCoroutines();
+                StopAllCoroutines(); //Stop any ColourFade coroutine that might be occurring
                 highestScore = roundedDistance;
-                UIManager.GetComponent<UpdateUIElement>().UpdateCounterInt(roundedDistance, scoreString, scoreCounter);
-                StartCoroutine(ColourFade());
+                UIManager.GetComponent<UpdateUIElement>().UpdateCounterInt(roundedDistance, scoreString, scoreCounter); //Update the score counter
+                StartCoroutine(ColourFade()); //Start a new ColourFade coroutine
             }
         }
 
@@ -48,10 +45,10 @@ public class FindDistanceTravelled : MonoBehaviour
         }
     }
 
-    IEnumerator ColourFade()
+    IEnumerator ColourFade() //Indicates when the counter has not been updated in some time
     {
-        scoreCounter.GetComponent<Text>().color = Color.red;
-        yield return new WaitForSeconds(3f);
-        scoreCounter.GetComponent<Text>().color = Color.grey;
+        scoreCounter.GetComponent<Text>().color = Color.red; //Sets the colour to red
+        yield return new WaitForSeconds(2f);
+        scoreCounter.GetComponent<Text>().color = Color.grey; //Then after set amount of time, changes it to grey
     }
 }

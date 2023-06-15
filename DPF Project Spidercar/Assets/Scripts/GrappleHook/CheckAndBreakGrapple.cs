@@ -11,15 +11,15 @@ public class CheckAndBreakGrapple : MonoBehaviour
 
     public GameObject grapplePointObject;
     public GameObject grappleOrigin;
-    public GameObject debugShape;
+    public GameObject debugShape; //Used to show in world-space the raycast landed
     RaycastHit2D grapplePointRaycastHit;
     RaycastHit2D raycastLengthChecker;
     private Vector3 rayDirection;
-    private Vector3 lengthRayDirection;
+    private Vector3 lengthRayDirection; //Used in archive method. Keeping it if method is restored
 
-    public float grappleRayLength;
+    public float grappleRayLength; //Length of raycast
     public LayerMask grappleLayers; //Filters only Walls and Poles for grappling raycast
-    public LayerMask grappleLayersInverse;
+    public LayerMask grappleLayersInverse; //Filters only GrapplePoint for checking against another raycast to determine grapple intersections
     private Color debugGrappleColour = Color.red;
 
     void Start()
@@ -100,5 +100,4 @@ public class CheckAndBreakGrapple : MonoBehaviour
         }
     * ----------------------------------------------------------------------
     */
-
 }

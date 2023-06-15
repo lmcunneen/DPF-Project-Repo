@@ -6,52 +6,54 @@ using UnityEngine;
 public class GrapplingHook : MonoBehaviour
 {
     /* SCRIPT FUNCTION:
-     * Handles most logic used for the grappling hook, and this is all in one script because...
-     *  1. The forces and rotations can be exerted on the player car directly
-     *  2. Many of these variables are used in multiple areas of functionality within this script
-     * However, other functionality is consolidated like finding relative position of grapple point (CheckIntersection) and breaking the grappling hook around corners (BreakGrapple)
-     * 
-     * This code is difficult to read and maintain, so I will be cleaning up the formatting and such when I get the chance
+     * Handles most logic and all references used for the grappling hook. This includes (in order of operations):
+     *  - Finding the /POSITION OF THE MOUSE/ in world space
+     *  - Referencing CheckAndBreakGrapple to see if the grapple was successful for calculations or is intersecting with something
+     *  - Referencing CheckIntersection to determine /RELATIVE POSITION OF GRAPPLE POINT/
+     *  - Finding /RELATIVE MOVEMENT/ direction of car (forwards or backwards)
+     *  - Determining the /TURN DIRECTION/ by factoring in relative position and movement direction (movement direction not implemented)
+     *  - /CALCULATING AND APPLIES ROTATIONS/ of the car turning around the grapple
+     *  - /ENDING GRAPPLE/ under specified circumstances
      */
 
     public GameObject grapplePointObject; //The game object that defines where the grapple hook is
     public GameObject gameManager; //The game object that holds scripts that run many external systems
-    public SpringJoint2D springJoint; //The component that joins together the car and grapple point by a 'rope' essentially
-    private Rigidbody2D rb; //The rigidbody component that calculates physics such as drag, mass and gravity
-    public LineRenderer lineRenderer; //The component that draws the rope between the grapple and the car
-    private Vector3[] lineRendererPoints; //Array of the points the line renderer conforms to
+    private Vector3 mouseWorldPos; //Stored mouse position
 
-    float piFloat; //Used for circumference calculations. 
+    private bool doCalc; //Allows for certain calculations in FixedUpdate to only run once
 
-    bool doCalc;
-    public bool grappleSuccess;
-    public bool grappleState;
-    bool isBroken;
+    public bool grappleSuccess; //Bool that returns true if grapple is successful. Referenced in this and other scripts
+    public bool grappleState; //Referenced bool from CheckAndBreakGrapple script, to see if raycast was successful
+    private bool isBroken; //Referenced bool from CheckAndBreakGrapple script, to see if grapple is deemed broken
     public bool brokenDistanceCheck; //Unused boolean that was supposed to ignore the first calculation of the broken distance, but didn't. Archived for future debugging
-
-    bool isAbove;
-    float turnMultiplier; //The float used to make the rotationAngle positive or negative, making it turn correctly for left and right
-    Vector2 velocity; //Finding velocity for turnMultiplier checks (forwards and backwards changes rotation)
-    Vector3 localVelocity;
-    bool grappleColliderTopCheck;
-    bool grappleColliderBottomCheck;
 
     public GameObject topCollider;
     public GameObject bottomCollider;
     public GameObject positionChecker;
+    private Vector2 velocity; //Finding velocity for turnMultiplier checks (forwards and backwards changes rotation)
+    private Vector3 localVelocity; //CURRENTLY UNUSED VARIABLE THAT WILL LATER HOLD FUNCTIONALITY FOR DETERMINING RELATIVE DIRECTION, AS A WORKING METHOD HAS NOT BEEN FOUND YET!!!!!!
+    private bool grappleColliderTopCheck; //Bool that returns holds state for the TOP collider's CheckIntersection calculations
+    private bool grappleColliderBottomCheck;//Bool that returns holds state for the BOTTOM collider's CheckIntersection calculations
+    private bool isAbove; //Bool that is used for finding the turn multiplier (found through the CheckIntersection script calculations)
+    private float turnMultiplier; //The float used to make the rotationAngle positive or negative, making it turn correctly for left and right
+
+    public SpringJoint2D springJoint; //The component that joins together the car and grapple point by a 'rope' essentially
+    private Rigidbody2D rb; //The rigidbody component that calculates physics such as drag, mass and gravity
+    public LineRenderer lineRenderer; //The component that draws the rope between the grapple and the car
+    private Vector3[] lineRendererPoints; //Array of the points the line renderer conforms to
+    private float piFloat; //Used for circumference calculations
 
     void Awake()
     {
-        piFloat = 3.141592f;
-
-        springJoint = GetComponent<SpringJoint2D>();
-        rb = GetComponent<Rigidbody2D>();
-        lineRenderer = GetComponent<LineRenderer>();
+        grapplePointObject.GetComponent<SpriteRenderer>().enabled = false;
 
         doCalc = true;
         brokenDistanceCheck = false;
 
-        grapplePointObject.GetComponent<SpriteRenderer>().enabled = false;
+        springJoint = GetComponent<SpringJoint2D>();
+        rb = GetComponent<Rigidbody2D>();
+        lineRenderer = GetComponent<LineRenderer>();
+        piFloat = 3.141592f;
     }
 
     void FixedUpdate()
@@ -68,9 +70,6 @@ public class GrapplingHook : MonoBehaviour
                     brokenDistanceCheck = false;
 
                     grapplePointObject.GetComponent<SpriteRenderer>().enabled = true;
-
-                    var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Finds position of the mouse on the screen and defines a 'transform' variable
-                    mouseWorldPos.z = 0;
 
                     positionChecker.transform.localPosition = mouseWorldPos;
 
@@ -93,8 +92,6 @@ public class GrapplingHook : MonoBehaviour
                     localVelocity = transform.InverseTransformDirection(velocity);
 
                     FindTurnMultiplier(); //!!!!!Please fix later!!!!!
-
-                    
 
                     //Debug.Log("Turn calculation is done!");
                 }
@@ -124,14 +121,13 @@ public class GrapplingHook : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         grapplePointObject.transform.rotation = transform.rotation;
 
         if (Input.GetKeyDown(KeyCode.Mouse0)) //When the mouse is pressed down (activating once), find the grapple point
         {
-            var mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Finds position of the mouse on the screen and defines a 'transform' variable
+            mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Finds position of the mouse on the screen and defines a 'transform' variable
             mouseWorldPos.z = 0; //Makes the point conform to the 2D plane
             grapplePointObject.transform.position = mouseWorldPos; //Moves the grapple point to where the mouse was clicked
         }
@@ -196,7 +192,7 @@ public class GrapplingHook : MonoBehaviour
         lineRenderer.enabled = true;
         //Handles Rotation Logic
         Vector3 rotationMask = new Vector3(0, 0, 1); //Only rotates on Z axis
-        Vector3 point = grapplePointObject.transform.position; //Assigns the grapple point position to a vector 3 for rotation
+        Vector3 point = grapplePointObject.transform.position; //Assigns the grapple point position to a Vector3 for rotation
         transform.RotateAround(point, rotationMask, Time.fixedDeltaTime * rotationAngle);
 
         lineRendererPoints = new Vector3[] { grapplePointObject.transform.position, gameObject.transform.position }; //Defines the start and end of the line

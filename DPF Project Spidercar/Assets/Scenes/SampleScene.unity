@@ -211,6 +211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grapplePointObject: {fileID: 1273589625}
   grappleOrigin: {fileID: 86997741}
+  grappleHook: {fileID: 674489612}
   debugShape: {fileID: 517032507}
   grappleRayLength: 0
   grappleLayers:
@@ -971,7 +972,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 86997741}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.13000488, y: -0.099999964, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2761,7 +2762,6 @@ GameObject:
   m_Component:
   - component: {fileID: 674489616}
   - component: {fileID: 674489615}
-  - component: {fileID: 674489614}
   - component: {fileID: 674489613}
   m_Layer: 0
   m_Name: GrapplingHookSprite
@@ -2796,19 +2796,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.5}
   m_EdgeRadius: 0
---- !u!114 &674489614
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 674489612}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f77e1f0dd3acbeb45bbcefcb075dbb7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hookSuccess: 0
 --- !u!212 &674489615
 SpriteRenderer:
   m_ObjectHideFlags: 0

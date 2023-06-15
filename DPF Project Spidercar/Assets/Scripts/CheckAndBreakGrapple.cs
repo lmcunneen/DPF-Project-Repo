@@ -15,14 +15,16 @@ public class CheckAndBreakGrapple : MonoBehaviour
     RaycastHit2D grapplePointRaycastHit;
     RaycastHit2D raycastLengthChecker;
     private Vector3 rayDirection;
+    private Vector3 lengthRayDirection;
 
     public float grappleRayLength;
     public LayerMask grappleLayers; //Filters only Walls and Poles for grappling raycast
-    private Color debugGrappleColour = Color.white;
+    public LayerMask grappleLayersInverse;
+    private Color debugGrappleColour = Color.red;
 
     void Start()
     {
-        grappleRayLength = 20f;
+        grappleRayLength = 30f;
     }
 
     public bool CheckGrappleFunc()
@@ -37,6 +39,7 @@ public class CheckAndBreakGrapple : MonoBehaviour
         {
             Debug.Log("Raycast has hit!");
             grapplePointObject.transform.position = grapplePointRaycastHit.point;
+            debugShape.transform.position = grapplePointRaycastHit.point;
             return true;
         }
 
@@ -50,18 +53,20 @@ public class CheckAndBreakGrapple : MonoBehaviour
 
     public bool BreakGrappleFunc()
     {
-        rayDirection = (grapplePointObject.transform.position - grappleOrigin.transform.position).normalized;
+        rayDirection = (grapplePointObject.transform.position - grappleOrigin.transform.position);
 
-        grapplePointRaycastHit = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection);
+        grapplePointRaycastHit = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, grappleLayersInverse);
         Debug.DrawRay(grappleOrigin.transform.position, rayDirection, debugGrappleColour, 1f);
 
         raycastLengthChecker = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, grappleLayers);
         debugShape.transform.position = raycastLengthChecker.point;
 
-        float hitDistance = Vector2.Distance(grapplePointObject.transform.position, debugShape.transform.position);
-        Debug.Log(hitDistance);
+        float hitDistance = Vector2.Distance(grapplePointRaycastHit.point, raycastLengthChecker.point);
+        Debug.Log("Distance between break: " + hitDistance);
 
-        if (hitDistance > 4f)
+        return false; //Debug line that stops the check, showing that the intersection is working
+
+        if (hitDistance < 1.5f)
         {
             return false;
         }
@@ -71,4 +76,29 @@ public class CheckAndBreakGrapple : MonoBehaviour
             return true;
         }
     }
+
+    /* ARCHIVE METHODS:
+     *  rayDirection = (grapplePointObject.transform.position - grappleOrigin.transform.position).normalized;
+
+        grapplePointRaycastHit = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, grappleLayersInverse);
+        debugShape.transform.position = grapplePointRaycastHit.point;
+
+        lengthRayDirection = (grapplePointObject.transform.position - debugShape.transform.position);
+
+        raycastLengthChecker = Physics2D.Raycast(debugShape.transform.position, lengthRayDirection);
+
+        Debug.Log("Distance between break: " + raycastLengthChecker.distance);
+
+        if (raycastLengthChecker.distance < 1.5f)
+        {
+            return false;
+        }
+
+        else
+        {
+            return true;
+        }
+    * ----------------------------------------------------------------------
+    */
+
 }

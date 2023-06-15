@@ -27,6 +27,7 @@ public class GrapplingHook : MonoBehaviour
     bool grappleSuccess;
     public bool grappleState;
     bool isBroken;
+    public bool brokenDistanceCheck; //Unused boolean that was supposed to ignore the first calculation of the broken distance, but didn't. Archived for future debugging
 
     bool isAbove;
     float turnMultiplier; //The float used to make the rotationAngle positive or negative, making it turn correctly for left and right
@@ -48,6 +49,7 @@ public class GrapplingHook : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
 
         doCalc = true;
+        brokenDistanceCheck = false;
 
         grapplePointObject.GetComponent<SpriteRenderer>().enabled = false;
     }
@@ -63,6 +65,7 @@ public class GrapplingHook : MonoBehaviour
                 if (grappleState == true)
                 {
                     grappleSuccess = true;
+                    brokenDistanceCheck = false;
 
                     grapplePointObject.GetComponent<SpriteRenderer>().enabled = true;
 
@@ -136,6 +139,7 @@ public class GrapplingHook : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             doCalc = true;
+            brokenDistanceCheck = false;
         }
     }
 

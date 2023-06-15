@@ -11,7 +11,9 @@ public class CheckAndBreakGrapple : MonoBehaviour
 
     public GameObject grapplePointObject;
     public GameObject grappleOrigin;
+    public GameObject grappleHook;
     public GameObject debugShape; //Used to show in world-space the raycast landed
+    RaycastHit2D hookPathRaycast;
     RaycastHit2D grapplePointRaycastHit;
     RaycastHit2D raycastLengthChecker;
     private Vector3 rayDirection;
@@ -30,6 +32,8 @@ public class CheckAndBreakGrapple : MonoBehaviour
     public bool CheckGrappleFunc()
     {
         rayDirection = (grapplePointObject.transform.position - grappleOrigin.transform.position).normalized;
+
+        hookPathRaycast = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength);
 
         grapplePointRaycastHit = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, grappleLayers);
 
@@ -75,6 +79,11 @@ public class CheckAndBreakGrapple : MonoBehaviour
         {
             return true;
         }
+    }
+
+    private void Update()
+    {
+        grappleHook.transform.position = Vector2.Lerp(grappleOrigin.transform.position, hookPathRaycast.point, Time.deltaTime);
     }
 
     /* ARCHIVE METHODS:

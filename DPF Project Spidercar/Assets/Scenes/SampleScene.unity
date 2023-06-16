@@ -509,9 +509,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32e482e0aef10d64fb141e6aadd69cc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vehicle: {fileID: 180431983}
   objectToFollow: {fileID: 7749783929836128869}
   zPos: -10
-  lerpAngle: 10
+  lerpRateInspector: 10
+  transitionRate: 0
 --- !u!1 &30427125
 GameObject:
   m_ObjectHideFlags: 0

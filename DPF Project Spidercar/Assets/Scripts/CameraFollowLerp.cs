@@ -15,7 +15,7 @@ public class CameraFollowLerp : MonoBehaviour
     [SerializeField] private float zPos;
     [SerializeField] private float lerpAngle;
 
-    void Update()
+    void FixedUpdate()
     {
         if (Input.GetKey(KeyCode.Mouse0))
         {

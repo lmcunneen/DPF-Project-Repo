@@ -511,7 +511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToFollow: {fileID: 7749783929836128869}
   zPos: -10
-  lerpAngle: 30
+  lerpAngle: 10
 --- !u!1 &30427125
 GameObject:
   m_ObjectHideFlags: 0
@@ -1770,7 +1770,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0.7535238, a: 0.39215687}
+  m_Color: {r: 1, g: 0, b: 0.7535238, a: 0.15686275}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3540,7 +3540,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.20301843, g: 1, b: 0, a: 0.39215687}
+  m_Color: {r: 0.20301843, g: 1, b: 0, a: 0.15686275}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

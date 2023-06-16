@@ -510,6 +510,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToFollow: {fileID: 7749783929836128869}
+  lerpActive: 0
+  lerpAngle: 0
 --- !u!1 &30427125
 GameObject:
   m_ObjectHideFlags: 0
@@ -992,6 +994,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToFollow: {fileID: 7749783929836128868}
+  lerpActive: 0
+  lerpAngle: 0
 --- !u!1001 &137450086
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1694,6 +1698,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToFollow: {fileID: 1567243006}
+  lerpActive: 0
+  lerpAngle: 0
 --- !u!61 &375909075
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1799,6 +1805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7778a9f18d15b834aa6290cf96174a27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grapplePointObject: {fileID: 1273589625}
   layerMask:
     serializedVersion: 2
     m_Bits: 8
@@ -3461,6 +3468,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToFollow: {fileID: 1920539239}
+  lerpActive: 0
+  lerpAngle: 0
 --- !u!61 &783768807
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3566,6 +3575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7778a9f18d15b834aa6290cf96174a27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grapplePointObject: {fileID: 0}
   layerMask:
     serializedVersion: 2
     m_Bits: 8
@@ -8278,6 +8288,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 15029881}
     m_Modifications:
+    - target: {fileID: 1718635145952290443, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
+      propertyPath: forwardSpeed
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1718635145952290443, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
+      propertyPath: reverseSpeed
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 2105253804356591078, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.71325046

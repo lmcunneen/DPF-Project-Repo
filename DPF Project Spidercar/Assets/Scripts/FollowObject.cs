@@ -12,6 +12,8 @@ public class FollowObject : MonoBehaviour
      */
 
     public GameObject objectToFollow;
+    [SerializeField] private bool lerpActive;
+    [SerializeField] private float lerpAngle;
 
     void Update()
     {

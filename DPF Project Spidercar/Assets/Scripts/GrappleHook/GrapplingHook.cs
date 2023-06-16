@@ -123,20 +123,6 @@ public class GrapplingHook : MonoBehaviour
     void Update()
     {
         grapplePointObject.transform.rotation = transform.rotation;
-
-        if (Input.GetKeyDown(KeyCode.Mouse0)) //When the mouse is pressed down (activating once), find the grapple point
-        {
-            /*mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Finds position of the mouse on the screen and defines a 'transform' variable
-            mouseWorldPos.z = 0; //Makes the point conform to the 2D plane
-            grapplePointObject.transform.position = mouseWorldPos; //Moves the grapple point to where the mouse was clicked
-            */
-        }
-
-        if (Input.GetKeyUp(KeyCode.Mouse0))
-        {
-            doCalc = true;
-            brokenDistanceCheck = false;
-        }
     }
 
     void FindTurnMultiplier()
@@ -179,9 +165,9 @@ public class GrapplingHook : MonoBehaviour
         float vehicleVelocity = rb.velocity.magnitude; //Finds current vehicle velocity
                                                        //Now the calculations are made
         float grappleCircumference = 2 * piFloat * distanceRadius; //Finds circumference of turning circle (distance)
-        float fullRotationTime = grappleCircumference / vehicleVelocity; //Finds the time it would take to finish the circle. Unsure of what measurement of time it would refer to...
-        float segmentTimePerUpdate = fullRotationTime * Time.fixedDeltaTime; //This doesn't work, as it rounds down the number to small, making the result to miniscule. Return to this and fix it
-        float rotationAngle = (360 / (segmentTimePerUpdate * 50)) * turnMultiplier; //Determines the angle (still needs more work to accurately find it) and filters it through the turnMultiplier
+        float fullRotationTime = grappleCircumference / vehicleVelocity; //Finds the time it would take to finish the circle. Measures in units per second
+        float segmentsPerRotation = fullRotationTime / Time.fixedDeltaTime; //Finds how many segments are travelled during whole rotation
+        float rotationAngle = (360 / segmentsPerRotation) * turnMultiplier; //Determines the angle of each segment and filters it through the turnMultiplier
 
         //Debug.Log("VELOCITY: " + vehicleVelocity);
         //Debug.Log(grappleCircumference + " / " + vehicleVelocity + " = " + fullRotationTime);
@@ -193,7 +179,7 @@ public class GrapplingHook : MonoBehaviour
         //Handles Rotation Logic
         Vector3 rotationMask = new Vector3(0, 0, 1); //Only rotates on Z axis
         Vector3 point = grapplePointObject.transform.position; //Assigns the grapple point position to a Vector3 for rotation
-        transform.RotateAround(point, rotationMask, Time.fixedDeltaTime * rotationAngle);
+        transform.RotateAround(point, rotationMask, rotationAngle); //RotateAround function that enacts the rotation
 
         lineRendererPoints = new Vector3[] { grapplePointObject.transform.position, gameObject.transform.position }; //Defines the start and end of the line
         lineRenderer.SetPositions(lineRendererPoints); //Sets the positions to the previously defined positions
@@ -208,5 +194,8 @@ public class GrapplingHook : MonoBehaviour
 
         turnMultiplier = 0;
         grappleState = false;
+
+        doCalc = true;
+        brokenDistanceCheck = false;
     }
 }

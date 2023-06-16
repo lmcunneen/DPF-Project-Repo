@@ -25,9 +25,8 @@ public class FollowObject : MonoBehaviour
     {
         //Conforms object to the position
         Vector3 pivotPosition = Vector3.Scale(pivot.transform.position, new Vector3(1, 1, 0));
-        Vector3 objectPosition = pivotPosition;
-        objectPosition.z = zPos;
-        gameObject.transform.position = objectPosition;
+        pivotPosition.z = zPos;
+        gameObject.transform.position = pivotPosition;
         //Conforms object to the rotation
         Quaternion pivotRotation = pivot.transform.rotation;
         Quaternion objectRotation = pivotRotation * Quaternion.Euler(0, 0, 1);

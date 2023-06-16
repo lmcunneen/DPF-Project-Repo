@@ -17,21 +17,40 @@ public class CameraFollowLerp : MonoBehaviour
 
     void Update()
     {
-        LerpPivotFunction(objectToFollow);
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            LerpPivotFunction(objectToFollow);
+        }
+
+        else
+        {
+            PivotFunctionDuplicate(objectToFollow);
+        }
+    }
+
+    void PivotFunctionDuplicate(GameObject pivot)
+    {
+        //Conforms object to the position
+        Vector3 pivotPosition = Vector3.Scale(pivot.transform.position, new Vector3(1, 1, 0));
+        pivotPosition.z = zPos;
+        gameObject.transform.position = pivotPosition;
+        //Conforms object to the rotation
+        Quaternion pivotRotation = pivot.transform.rotation;
+        Quaternion objectRotation = pivotRotation * Quaternion.Euler(0, 0, 1);
+        gameObject.transform.rotation = objectRotation;
     }
 
     void LerpPivotFunction(GameObject pivot)
     {
         //Conforms object to the position (linear interpolation)
         Vector3 pivotPosition = Vector3.Scale(pivot.transform.position, new Vector3(1, 1, 0));
-        Vector3 objectPosition = pivotPosition;
         Vector3 currentPosition = gameObject.transform.position;
-        objectPosition.z = zPos;
-        gameObject.transform.position = Vector2.Lerp(transform.position, objectPosition, lerpAngle);
-        currentPosition.z = zPos;
+        pivotPosition.z = -10;
+        gameObject.transform.position = Vector3.Lerp(currentPosition, pivotPosition, lerpAngle * Time.deltaTime);
+        currentPosition.z = -10;
         //Conforms object to the rotation (spherical linear interpolation)
         Quaternion pivotRotation = pivot.transform.rotation;
         Quaternion objectRotation = pivotRotation * Quaternion.Euler(0, 0, 1);
-        gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, objectRotation, lerpAngle);
+        gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, objectRotation, lerpAngle * Time.deltaTime);
     }
 }

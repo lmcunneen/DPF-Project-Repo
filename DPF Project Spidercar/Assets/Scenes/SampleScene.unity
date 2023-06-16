@@ -511,7 +511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToFollow: {fileID: 7749783929836128869}
   zPos: -10
-  lerpAngle: 3
+  lerpAngle: 30
 --- !u!1 &30427125
 GameObject:
   m_ObjectHideFlags: 0
@@ -8294,6 +8294,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 15029881}
     m_Modifications:
+    - target: {fileID: 2105253804356591078, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -10
+      objectReference: {fileID: 0}
     - target: {fileID: 2105253804356591078, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.71325046

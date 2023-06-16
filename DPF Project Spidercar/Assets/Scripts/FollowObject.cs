@@ -12,6 +12,7 @@ public class FollowObject : MonoBehaviour
      */
 
     public GameObject objectToFollow;
+    [SerializeField] private float zPos;
     [SerializeField] private bool lerpActive;
     [SerializeField] private float lerpAngle;
 
@@ -25,7 +26,7 @@ public class FollowObject : MonoBehaviour
         //Conforms object to the position
         Vector3 pivotPosition = Vector3.Scale(pivot.transform.position, new Vector3(1, 1, 0));
         Vector3 objectPosition = pivotPosition;
-        objectPosition.z = -10f;
+        objectPosition.z = zPos;
         gameObject.transform.position = objectPosition;
         //Conforms object to the rotation
         Quaternion pivotRotation = pivot.transform.rotation;

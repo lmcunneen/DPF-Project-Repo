@@ -506,12 +506,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 24203833}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2a27129e20b68d41aef0f77f7a42cfb, type: 3}
+  m_Script: {fileID: 11500000, guid: 32e482e0aef10d64fb141e6aadd69cc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   objectToFollow: {fileID: 7749783929836128869}
-  lerpActive: 0
-  lerpAngle: 0
+  zPos: -10
+  lerpAngle: 3
 --- !u!1 &30427125
 GameObject:
   m_ObjectHideFlags: 0
@@ -994,6 +994,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToFollow: {fileID: 7749783929836128868}
+  zPos: 0
   lerpActive: 0
   lerpAngle: 0
 --- !u!1001 &137450086
@@ -1062,7 +1063,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 165676046}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Layer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1127,7 +1128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 202572808}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Layer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1299,7 +1300,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 267685455}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Layer (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1339,7 +1340,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 292980756}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Second Layer (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1599,7 +1600,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 330352405}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Layer (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1639,7 +1640,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 356230387}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Layer (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1698,6 +1699,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToFollow: {fileID: 1567243006}
+  zPos: 0
   lerpActive: 0
   lerpAngle: 0
 --- !u!61 &375909075
@@ -1805,7 +1807,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7778a9f18d15b834aa6290cf96174a27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grapplePointObject: {fileID: 1273589625}
   layerMask:
     serializedVersion: 2
     m_Bits: 8
@@ -2051,7 +2052,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 471382379}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Layer (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2091,7 +2092,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 495409158}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Layer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3218,7 +3219,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 729035964}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Layer (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3468,6 +3469,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToFollow: {fileID: 1920539239}
+  zPos: 0
   lerpActive: 0
   lerpAngle: 0
 --- !u!61 &783768807
@@ -3575,7 +3577,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7778a9f18d15b834aa6290cf96174a27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grapplePointObject: {fileID: 0}
   layerMask:
     serializedVersion: 2
     m_Bits: 8
@@ -3960,7 +3961,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 921122055}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Layer (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4318,7 +4319,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1053039477}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Layer (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4430,7 +4431,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1116098448}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Layer (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4527,7 +4528,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1137676148}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Second Layer (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5190,7 +5191,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1289597572}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Second Layer (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5589,7 +5590,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1421571685}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Layer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5729,6 +5730,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b63b72d3b0a46d41bbc38798dd7ed28, type: 3}
+--- !u!1 &1443444024 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6574054067236436930, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
+  m_PrefabInstance: {fileID: 7749783929836128867}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1448223658
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6706,7 +6712,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 5
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0, g: 0.8039216, b: 1, a: 1}
   m_FlipX: 0
@@ -7279,7 +7285,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1735538023}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Layer (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7399,7 +7405,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1772690468}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Layer (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7501,7 +7507,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1852316145}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Layer (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7616,7 +7622,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1876821001}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Floor Monstrosity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7651,7 +7657,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1891208312}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: First Layer (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8055,7 +8061,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2085208229}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Second Layer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8288,14 +8294,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 15029881}
     m_Modifications:
-    - target: {fileID: 1718635145952290443, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
-      propertyPath: forwardSpeed
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 1718635145952290443, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
-      propertyPath: reverseSpeed
-      value: 50
-      objectReference: {fileID: 0}
     - target: {fileID: 2105253804356591078, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.71325046
@@ -8404,6 +8402,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 89
       objectReference: {fileID: 0}
+    - target: {fileID: 7724003997740632433, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
+      propertyPath: objectToFollow
+      value: 
+      objectReference: {fileID: 1273589625}
     - target: {fileID: 7749783929577195498, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: UIManager
       value: 
@@ -8428,6 +8430,10 @@ PrefabInstance:
       propertyPath: topCollider
       value: 
       objectReference: {fileID: 375909072}
+    - target: {fileID: 7749783931185056265, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
+      propertyPath: grappleFollow
+      value: 
+      objectReference: {fileID: 1443444024}
     - target: {fileID: 7749783931185056265, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: bottomCollider
       value: 

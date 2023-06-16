@@ -35,20 +35,20 @@ public class CheckIntersection : MonoBehaviour
         contactFilter.layerMask = layerMask;
         contactFilter.useTriggers = true;
 
-        //hitCollider = Physics2D.OverlapBox(gameObject.transform.position, boxSize, rotationAngle, layerMask);
-        hitColliderInt = Physics2D.OverlapCollider(boxCollider, contactFilter, colliders);
+        hitCollider = Physics2D.OverlapBox(gameObject.transform.position, boxSize, rotationAngle, layerMask);
+        //hitColliderInt = Physics2D.OverlapCollider(boxCollider, contactFilter, colliders);
 
         //Debug.Log(gameObject.name + " " + collider.gameObject.name);
 
-        if (colliders[0].gameObject.layer == 3)
+        if (hitCollider != null)
         {
-            Array.Clear(colliders, 0, colliders.Length);
+            //Array.Clear(colliders, 0, colliders.Length);
             return true;
         }
 
         else
         {
-            Array.Clear(colliders, 0, colliders.Length);
+            //Array.Clear(colliders, 0, colliders.Length);
             return false;
         }
     }

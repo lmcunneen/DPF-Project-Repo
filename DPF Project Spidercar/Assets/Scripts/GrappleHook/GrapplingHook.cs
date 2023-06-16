@@ -163,7 +163,7 @@ public class GrapplingHook : MonoBehaviour
         //Finds rotation angle for the RotateAround function with ***MATHS***
         float distanceRadius = springJoint.distance; //Finds grapple distance by reading the distance variable on the spring joint
         float vehicleVelocity = rb.velocity.magnitude; //Finds current vehicle velocity
-                                                       //Now the calculations are made
+        //Now the calculations are made
         float grappleCircumference = 2 * piFloat * distanceRadius; //Finds circumference of turning circle (distance)
         float fullRotationTime = grappleCircumference / vehicleVelocity; //Finds the time it would take to finish the circle. Measures in units per second
         float segmentsPerRotation = fullRotationTime / Time.fixedDeltaTime; //Finds how many segments are travelled during whole rotation

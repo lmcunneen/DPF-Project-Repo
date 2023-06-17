@@ -161,8 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToFollow: {fileID: 0}
   zPos: 0
-  lerpActive: 0
-  lerpAngle: 0
+  isStandalone: 1
 --- !u!1 &7749783929577195494
 GameObject:
   m_ObjectHideFlags: 0
@@ -442,6 +441,7 @@ MonoBehaviour:
   brokenDistanceCheck: 0
   topCollider: {fileID: 3278510598220414249}
   bottomCollider: {fileID: 9215707101707281558}
+  lerpDirectionFinder: {fileID: 0}
   springJoint: {fileID: 0}
   lineRenderer: {fileID: 0}
 --- !u!231 &7749783931185056266

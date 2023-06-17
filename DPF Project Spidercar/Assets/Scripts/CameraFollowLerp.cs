@@ -5,10 +5,8 @@ using UnityEngine;
 public class CameraFollowLerp : MonoBehaviour
 {
     /* SCRIPT FUNCTION:
-     * Specialised script to make the camera follow the player with a little bit of drag, creating a specific game feels
-     * This script is essentially a child of the FollowObject script with a few calculation changes
-     * 
-     * Still needs to be fully implemented...
+     * Specialised script that manages the current active ObjectFollow script (normal or lerp) for the camera
+     * NOTE: Needs both FollowObject and ObjectFollowLerp attached to Game Object in order to function, with isStandalone set as false in inspector
      */
 
     public GameObject vehicle;
@@ -36,7 +34,7 @@ public class CameraFollowLerp : MonoBehaviour
         {
             transitionStart = true;
             transitionFinish = false;
-            LerpPivotFunction(objectToFollow, lerpRateInspector);
+            gameObject.GetComponent<ObjectFollowLerp>().LerpPivotFunction(objectToFollow, lerpRateInspector, zPos);
         }
         
         else
@@ -46,7 +44,7 @@ public class CameraFollowLerp : MonoBehaviour
                 cameraDistance = Vector2.Distance(transform.position, objectToFollow.transform.position);
                 //Debug.Log("CAMERA DISTANCE = " +  cameraDistance);
                 transitionRate++;
-                LerpPivotFunction(objectToFollow, transitionRate);
+                gameObject.GetComponent<ObjectFollowLerp>().LerpPivotFunction(objectToFollow, transitionRate, zPos);
 
                 if (cameraDistance < 0.75)
                 {
@@ -59,36 +57,8 @@ public class CameraFollowLerp : MonoBehaviour
             if (transitionFinish)
             {
                 transitionRate = lerpRateInspector;
-                PivotFunctionDuplicate(objectToFollow);
+                gameObject.GetComponent<FollowObject>().PivotFunction(objectToFollow, zPos);
             }
         }
-    }
-
-    void PivotFunctionDuplicate(GameObject pivot)
-    {
-        //Conforms object to the position
-        Vector3 pivotPosition = Vector3.Scale(pivot.transform.position, new Vector3(1, 1, 0));
-        pivotPosition.z = zPos;
-        gameObject.transform.position = pivotPosition;
-        //Conforms object to the rotation
-        Quaternion pivotRotation = pivot.transform.rotation;
-        Quaternion objectRotation = pivotRotation * Quaternion.Euler(0, 0, 1);
-        gameObject.transform.rotation = objectRotation;
-        //Debug.Log("Pivot Func Running!");
-    }
-
-    void LerpPivotFunction(GameObject pivot, float lerpRate)
-    {
-        //Conforms object to the position (linear interpolation)
-        Vector3 pivotPosition = Vector3.Scale(pivot.transform.position, new Vector3(1, 1, 0));
-        Vector3 currentPosition = gameObject.transform.position;
-        pivotPosition.z = -10;
-        gameObject.transform.position = Vector3.Lerp(currentPosition, pivotPosition, lerpRate * Time.deltaTime);
-        currentPosition.z = -10;
-        //Conforms object to the rotation (spherical linear interpolation)
-        Quaternion pivotRotation = pivot.transform.rotation;
-        Quaternion objectRotation = pivotRotation * Quaternion.Euler(0, 0, 1);
-        gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, objectRotation, lerpRate * Time.deltaTime);
-        //Debug.Log("Lerp Func Running!");
     }
 }

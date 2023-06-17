@@ -70,7 +70,7 @@ public class CheckAndBreakGrapple : MonoBehaviour
 
         //return false; //Debug line that stops the check, showing that the intersection is working
 
-        if (hitDistance < 1.5f)
+        if (hitDistance < 1f)
         {
             return false;
         }

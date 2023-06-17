@@ -13,15 +13,17 @@ public class FollowObject : MonoBehaviour
 
     public GameObject objectToFollow;
     [SerializeField] private float zPos;
-    [SerializeField] private bool lerpActive;
-    [SerializeField] private float lerpAngle;
+    [SerializeField] private bool isStandalone; //Bool that runs the function in update if true. Done only for objects that these functions are NOT called elsewhere in the scripts
 
     void Update()
     {
-        PivotFunction(objectToFollow);
+        if (isStandalone)
+        {
+            PivotFunction(objectToFollow, zPos);
+        }
     }
 
-    void PivotFunction(GameObject pivot)
+    public void PivotFunction(GameObject pivot, float zPos)
     {
         //Conforms object to the position
         Vector3 pivotPosition = Vector3.Scale(pivot.transform.position, new Vector3(1, 1, 0));

@@ -28,8 +28,7 @@ public class GrapplingHook : MonoBehaviour
 
     public GameObject topCollider;
     public GameObject bottomCollider;
-    private Vector2 velocity; //Finding velocity for turnMultiplier checks (forwards and backwards changes rotation)
-    private Vector3 localVelocity; //CURRENTLY UNUSED VARIABLE THAT WILL LATER HOLD FUNCTIONALITY FOR DETERMINING RELATIVE DIRECTION, AS A WORKING METHOD HAS NOT BEEN FOUND YET!!!!!!
+    public GameObject lerpDirectionFinder;
     private bool grappleColliderTopCheck; //Bool that returns holds state for the TOP collider's CheckIntersection calculations
     private bool grappleColliderBottomCheck;//Bool that returns holds state for the BOTTOM collider's CheckIntersection calculations
     private bool isAbove; //Bool that is used for finding the turn multiplier (found through the CheckIntersection script calculations)
@@ -122,8 +121,7 @@ public class GrapplingHook : MonoBehaviour
         Debug.Log("Top state: " + grappleColliderTopCheck);
         Debug.Log("Bottom state: " + grappleColliderBottomCheck);
 
-        velocity = rb.velocity;
-        localVelocity = transform.InverseTransformDirection(velocity);
+        
 
         FindTurnMultiplier();
 

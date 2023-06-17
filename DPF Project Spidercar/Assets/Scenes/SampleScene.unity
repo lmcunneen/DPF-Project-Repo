@@ -212,7 +212,6 @@ MonoBehaviour:
   grapplePointObject: {fileID: 1273589625}
   grappleOrigin: {fileID: 86997741}
   grappleHook: {fileID: 674489612}
-  debugShape: {fileID: 517032507}
   grappleRayLength: 0
   grappleLayers:
     serializedVersion: 2
@@ -260,6 +259,7 @@ Transform:
   - {fileID: 375909077}
   - {fileID: 783768809}
   - {fileID: 1901844072}
+  - {fileID: 1383973557}
   - {fileID: 180431984}
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -391,6 +391,8 @@ GameObject:
   - component: {fileID: 24203836}
   - component: {fileID: 24203835}
   - component: {fileID: 24203839}
+  - component: {fileID: 24203841}
+  - component: {fileID: 24203840}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -514,6 +516,37 @@ MonoBehaviour:
   zPos: -10
   lerpRateInspector: 10
   transitionRate: 10
+--- !u!114 &24203840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24203833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5db259545dd72c4aa8d8be64f87ecba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToFollow: {fileID: 7749783929836128869}
+  lerpRateInspector: 0
+  zPos: -10
+  isStandalone: 0
+--- !u!114 &24203841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24203833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2a27129e20b68d41aef0f77f7a42cfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectToFollow: {fileID: 7749783929836128869}
+  zPos: -10
+  isStandalone: 0
 --- !u!1 &30427125
 GameObject:
   m_ObjectHideFlags: 0
@@ -997,8 +1030,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToFollow: {fileID: 7749783929836128868}
   zPos: 0
-  lerpActive: 0
-  lerpAngle: 0
+  isStandalone: 1
 --- !u!1001 &137450086
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1702,8 +1734,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToFollow: {fileID: 1567243006}
   zPos: 0
-  lerpActive: 0
-  lerpAngle: 0
+  isStandalone: 1
 --- !u!61 &375909075
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3472,8 +3503,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToFollow: {fileID: 1920539239}
   zPos: 0
-  lerpActive: 0
-  lerpAngle: 0
+  isStandalone: 1
 --- !u!61 &783768807
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5526,6 +5556,55 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b63b72d3b0a46d41bbc38798dd7ed28, type: 3}
+--- !u!1 &1383973556
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1383973557}
+  - component: {fileID: 1383973558}
+  m_Layer: 0
+  m_Name: LerpDirectionFinder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1383973557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383973556}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 38.549835, y: -11.090694, z: -15.241501}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 15029881}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1383973558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383973556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32e482e0aef10d64fb141e6aadd69cc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vehicle: {fileID: 180431983}
+  objectToFollow: {fileID: 180431983}
+  zPos: 0
+  lerpRateInspector: 0
+  transitionRate: 0
 --- !u!1001 &1420983562
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8474,7 +8553,7 @@ PrefabInstance:
       objectReference: {fileID: 1273589629}
     - target: {fileID: 7749783931185056267, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7749783931185056267, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: m_LocalScale.y

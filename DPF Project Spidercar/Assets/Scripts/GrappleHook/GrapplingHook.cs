@@ -46,7 +46,10 @@ public class GrapplingHook : MonoBehaviour
         grapplePointObject.GetComponent<SpriteRenderer>().enabled = false;
 
         doCalc = true;
-        brokenDistanceCheck = false;
+
+        grappleColliderTopCheck = false;
+        grappleColliderBottomCheck = false;
+        isBroken = false;
 
         springJoint = GetComponent<SpringJoint2D>();
         rb = GetComponent<Rigidbody2D>();
@@ -68,39 +71,15 @@ public class GrapplingHook : MonoBehaviour
 
                 if (grappleState == true)
                 {
-                    brokenDistanceCheck = false;
-
                     grapplePointObject.GetComponent<SpriteRenderer>().enabled = true;
 
-                    grappleColliderTopCheck = topCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
-
-                    if (grappleColliderTopCheck == false)
-                    {
-                        grappleColliderBottomCheck = bottomCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
-                    }
-
-                    else
-                    {
-                        grappleColliderBottomCheck = false;
-                    }
-
-                    Debug.Log("Top state: " + grappleColliderTopCheck);
-                    Debug.Log("Bottom state: " + grappleColliderBottomCheck);
-
-                    velocity = rb.velocity;
-                    localVelocity = transform.InverseTransformDirection(velocity);
-
-                    FindTurnMultiplier(); //!!!!!Please fix later!!!!!
-
-                    //Debug.Log("Turn calculation is done!");
+                    StartCoroutine(CheckTurnNextFixedUpdate());
                 }
             }
 
-            doCalc = false;
-
             if (grappleState == true)
             {
-                isBroken = gameManager.GetComponent<CheckAndBreakGrapple>().BreakGrappleFunc();
+                StartCoroutine(CheckBreakNextFixedUpdate());
 
                 if (isBroken == false)
                 {
@@ -123,6 +102,34 @@ public class GrapplingHook : MonoBehaviour
     void Update()
     {
         grapplePointObject.transform.rotation = transform.rotation;
+    }
+
+    IEnumerator CheckTurnNextFixedUpdate()
+    {
+        yield return new WaitForFixedUpdate();
+        grappleColliderTopCheck = topCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
+
+        if (grappleColliderTopCheck == false)
+        {
+            grappleColliderBottomCheck = bottomCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
+        }
+
+        else
+        {
+            grappleColliderBottomCheck = false;
+        }
+
+        Debug.Log("Top state: " + grappleColliderTopCheck);
+        Debug.Log("Bottom state: " + grappleColliderBottomCheck);
+
+        velocity = rb.velocity;
+        localVelocity = transform.InverseTransformDirection(velocity);
+
+        FindTurnMultiplier();
+
+        Debug.Log("Turn calculation is done!");
+
+        doCalc = false;
     }
 
     void FindTurnMultiplier()
@@ -158,6 +165,12 @@ public class GrapplingHook : MonoBehaviour
         }
     }
 
+    IEnumerator CheckBreakNextFixedUpdate()
+    {
+        yield return new WaitForFixedUpdate();
+        isBroken = gameManager.GetComponent<CheckAndBreakGrapple>().BreakGrappleFunc();
+    }    
+
     void TurnCalculations()
     {
         //Finds rotation angle for the RotateAround function with ***MATHS***
@@ -192,10 +205,12 @@ public class GrapplingHook : MonoBehaviour
         lineRenderer.enabled = false;
         grapplePointObject.GetComponent<SpriteRenderer>().enabled = false;
 
+        grappleColliderTopCheck = false;
+        grappleColliderBottomCheck = false;
         turnMultiplier = 0;
         grappleState = false;
+        isBroken = false;
 
         doCalc = true;
-        brokenDistanceCheck = false;
     }
 }

@@ -513,7 +513,7 @@ MonoBehaviour:
   objectToFollow: {fileID: 7749783929836128869}
   zPos: -10
   lerpRateInspector: 10
-  transitionRate: 0
+  transitionRate: 10
 --- !u!1 &30427125
 GameObject:
   m_ObjectHideFlags: 0

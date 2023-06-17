@@ -12,7 +12,7 @@ public class CheckAndBreakGrapple : MonoBehaviour
     public GameObject grapplePointObject;
     public GameObject grappleOrigin;
     public GameObject grappleHook;
-    public GameObject debugShape; //Used to show in world-space the raycast landed
+    //public GameObject debugShape; //Used to show in world-space the raycast landed
     RaycastHit2D hookPathRaycast;
     RaycastHit2D grapplePointRaycastHit;
     RaycastHit2D raycastLengthChecker;
@@ -43,7 +43,7 @@ public class CheckAndBreakGrapple : MonoBehaviour
         {
             Debug.Log("Raycast has hit!");
             grapplePointObject.transform.position = grapplePointRaycastHit.point;
-            debugShape.transform.position = grapplePointRaycastHit.point;
+            //debugShape.transform.position = grapplePointRaycastHit.point;
             return true;
         }
 
@@ -63,12 +63,12 @@ public class CheckAndBreakGrapple : MonoBehaviour
         Debug.DrawRay(grappleOrigin.transform.position, rayDirection, debugGrappleColour, 1f);
 
         raycastLengthChecker = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, grappleLayers);
-        debugShape.transform.position = raycastLengthChecker.point;
+        //debugShape.transform.position = raycastLengthChecker.point;
 
         float hitDistance = Vector2.Distance(grapplePointRaycastHit.point, raycastLengthChecker.point);
         //Debug.Log("Distance between break: " + hitDistance);
 
-        return false; //Debug line that stops the check, showing that the intersection is working
+        //return false; //Debug line that stops the check, showing that the intersection is working
 
         if (hitDistance < 1.5f)
         {

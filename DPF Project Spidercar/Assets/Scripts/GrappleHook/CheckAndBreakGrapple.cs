@@ -12,17 +12,17 @@ public class CheckAndBreakGrapple : MonoBehaviour
     public GameObject grapplePointObject;
     public GameObject grappleOrigin;
     public GameObject grappleHook;
-    //public GameObject debugShape; //Used to show in world-space the raycast landed
+    public GameObject debugShape; //Used to show in world-space the raycast landed
     RaycastHit2D hookPathRaycast;
     RaycastHit2D grapplePointRaycastHit;
     RaycastHit2D raycastLengthChecker;
     private Vector3 rayDirection;
-    private Vector3 lengthRayDirection; //Used in archive method. Keeping it if method is restored
+    //private Vector3 lengthRayDirection; //Used in archive method. Keeping it if method is restored
 
     public float grappleRayLength; //Length of raycast
     public LayerMask grappleLayers; //Filters only Walls and Poles for grappling raycast
     public LayerMask grappleLayersInverse; //Filters only GrapplePoint for checking against another raycast to determine grapple intersections
-    private Color debugGrappleColour = Color.red;
+    public LayerMask hookPathLayers;
 
     void Start()
     {
@@ -33,7 +33,9 @@ public class CheckAndBreakGrapple : MonoBehaviour
     {
         rayDirection = (grapplePointObject.transform.position - grappleOrigin.transform.position).normalized;
 
-        hookPathRaycast = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength);
+        hookPathRaycast = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, hookPathLayers);
+
+        debugShape.transform.position = hookPathRaycast.point;
 
         grapplePointRaycastHit = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, grappleLayers);
 
@@ -60,7 +62,6 @@ public class CheckAndBreakGrapple : MonoBehaviour
         rayDirection = (grapplePointObject.transform.position - grappleOrigin.transform.position).normalized;
 
         grapplePointRaycastHit = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, grappleLayersInverse);
-        Debug.DrawRay(grappleOrigin.transform.position, rayDirection, debugGrappleColour, 1f);
 
         raycastLengthChecker = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, grappleLayers);
         //debugShape.transform.position = raycastLengthChecker.point;

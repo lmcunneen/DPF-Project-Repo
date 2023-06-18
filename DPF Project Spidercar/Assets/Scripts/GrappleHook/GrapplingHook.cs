@@ -11,7 +11,7 @@ public class GrapplingHook : MonoBehaviour
      *  - Referencing CheckAndBreakGrapple to see if the grapple was successful for calculations or is intersecting with something
      *  - Referencing CheckIntersection to determine /RELATIVE POSITION OF GRAPPLE POINT/
      *  - Finding /RELATIVE MOVEMENT/ direction of car (forwards or backwards)
-     *  - Determining the /TURN DIRECTION/ by factoring in relative position and movement direction (movement direction not implemented)
+     *  - Determining the /TURN DIRECTION/ by factoring in relative position and movement direction
      *  - /CALCULATING AND APPLIES ROTATIONS/ of the car turning around the grapple
      *  - /ENDING GRAPPLE/ under specified circumstances
      */
@@ -28,12 +28,9 @@ public class GrapplingHook : MonoBehaviour
 
     public GameObject topCollider;
     public GameObject bottomCollider;
-    public GameObject forwardCollider;
-    public GameObject reverseCollider;
     private bool grappleColliderTop; //Bool that returns holds state for the TOP collider's CheckIntersection calculations
     private bool grappleColliderBottom; //Bool that returns holds state for the BOTTOM collider's CheckIntersection calculations
-    private bool directionColliderForward;
-    private bool directionColliderReverse;
+    private bool currentBreakInput; //Bool that inherits the current breakState from the VehicleMovement script
     private float turnMultiplier; //The float used to make the rotationAngle positive or negative, making it turn correctly for left and right
 
     public SpringJoint2D springJoint; //The component that joins together the car and grapple point by a 'rope' essentially
@@ -109,36 +106,23 @@ public class GrapplingHook : MonoBehaviour
     {
         yield return new WaitForFixedUpdate();
         //Find Relative Grapple Position (above or below)
-        grappleColliderTop = topCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
+        grappleColliderTop = topCollider.GetComponent<CheckIntersection>().IsObjectIntersecting(); //Checks top collider
 
-        if (grappleColliderTop == false)
+        if (grappleColliderTop == false) //If the top collider returned false, then check the bottom collider
         {
             grappleColliderBottom = bottomCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
         }
 
-        else
+        else //If it's true, we know it will be false, so skip the check
         {
             grappleColliderBottom = false;
         }
 
         Debug.Log("Top state: " + grappleColliderTop);
         Debug.Log("Bottom state: " + grappleColliderBottom);
-
-        //Find Relative Direction (forward or reverse)
-        directionColliderForward = forwardCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
-
-        if (directionColliderForward == false)
-        {
-            directionColliderReverse = reverseCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
-        }
-
-        else
-        {
-            directionColliderReverse = false;
-        }
-
-        Debug.Log("Forward state: " + directionColliderForward);
-        Debug.Log("Reverse state: " + directionColliderReverse);
+        
+        //Finds current input for breaking
+        currentBreakInput = gameObject.GetComponent<VehicleMovement>().breakState;
 
         FindTurnMultiplier();
 
@@ -149,22 +133,22 @@ public class GrapplingHook : MonoBehaviour
 
     void FindTurnMultiplier()
     {
-        if (grappleColliderTop && directionColliderForward || grappleColliderBottom && directionColliderReverse)
+        if (grappleColliderTop && !currentBreakInput || grappleColliderBottom && currentBreakInput) //If above and forward OR below and reverse
         {
             turnMultiplier = 1;
         }
 
-        if (grappleColliderBottom && directionColliderForward || grappleColliderTop && directionColliderReverse)
+        if (grappleColliderBottom && !currentBreakInput || grappleColliderTop && currentBreakInput) //If below and forward OR above and reverse
         {
             turnMultiplier = -1;
         }
 
-        if (grappleColliderTop == false && grappleColliderBottom == false)
+        if (grappleColliderTop && grappleColliderBottom) //If neither above and below
         {
             turnMultiplier = 0;
         }
 
-        else if (grappleColliderTop && grappleColliderBottom || directionColliderForward && directionColliderReverse)
+        else if (grappleColliderTop && grappleColliderBottom) //If both above and below
         {
             Debug.LogWarning("Both checks returned true!!! Debug ASAP!");
         }

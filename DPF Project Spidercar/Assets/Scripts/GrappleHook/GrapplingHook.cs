@@ -16,41 +16,40 @@ public class GrapplingHook : MonoBehaviour
      *  - /ENDING GRAPPLE/ under specified circumstances
      */
 
-    public GameObject grapplePointObject; //The game object that defines where the grapple hook is
-    public GameObject gameManager; //The game object that holds scripts that run many external systems
-    private Vector3 mouseWorldPos; //Stored mouse position
+    public GameObject grapplePointObject;
+    public GameObject gameManager;
+    private Vector3 mouseWorldPos;
 
-    private bool doCalc; //Allows for certain calculations in FixedUpdate to only run once
+    private bool singleCalculationCheck;
 
-    public bool grappleState; //Referenced bool from CheckAndBreakGrapple script, to see if raycast was successful
-    private bool isBroken; //Referenced bool from CheckAndBreakGrapple script, to see if grapple is deemed broken
-    public bool brokenDistanceCheck; //Unused boolean that was supposed to ignore the first calculation of the broken distance, but didn't. Archived for future debugging
+    public bool grappleStateReference;
+    private bool isGrappleBrokenReference;
 
     public GameObject topCollider;
     public GameObject bottomCollider;
-    private bool grappleColliderTop; //Bool that returns holds state for the TOP collider's CheckIntersection calculations
-    private bool grappleColliderBottom; //Bool that returns holds state for the BOTTOM collider's CheckIntersection calculations
-    private bool currentBreakInput; //Bool that inherits the current breakState from the VehicleMovement script
-    private float turnMultiplier; //The float used to make the rotationAngle positive or negative, making it turn correctly for left and right
+    private bool isGrappleAbove;
+    private bool isGrappleBelow;
+    private bool reverseStateReference;
+    private float turnDirectionMultiplier;
 
-    public SpringJoint2D springJoint; //The component that joins together the car and grapple point by a 'rope' essentially
-    private Rigidbody2D rb; //The rigidbody component that calculates physics such as drag, mass and gravity
-    public LineRenderer lineRenderer; //The component that draws the rope between the grapple and the car
-    private Vector3[] lineRendererPoints; //Array of the points the line renderer conforms to
-    private float piFloat; //Used for circumference calculations
+    public SpringJoint2D springJoint;
+    private Rigidbody2D carRigidBody;
+    public LineRenderer lineRenderer; 
+    private Vector3[] lineRendererPoints;
+    private float piFloat;
 
     void Awake()
     {
         grapplePointObject.GetComponent<SpriteRenderer>().enabled = false;
 
-        doCalc = true;
+        singleCalculationCheck = true;
 
-        grappleColliderTop = false;
-        grappleColliderBottom = false;
-        isBroken = false;
+        isGrappleAbove = false;
+        isGrappleBelow = false;
+        isGrappleBrokenReference = false;
 
         springJoint = GetComponent<SpringJoint2D>();
-        rb = GetComponent<Rigidbody2D>();
+        carRigidBody = GetComponent<Rigidbody2D>();
         lineRenderer = GetComponent<LineRenderer>();
         piFloat = 3.141592f;
     }
@@ -59,15 +58,15 @@ public class GrapplingHook : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Mouse0)) //While the mouse is held down, do the following physics calculations
         {
-            if (doCalc == true)
+            if (singleCalculationCheck == true)
             {
                 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //Finds position of the mouse on the screen and defines a 'transform' variable
                 mouseWorldPos.z = 0; //Makes the point conform to the 2D plane
                 grapplePointObject.transform.position = mouseWorldPos; //Moves the grapple point to where the mouse was clicked
 
-                grappleState = gameManager.GetComponent<CheckAndBreakGrapple>().CheckGrappleFunc();
+                grappleStateReference = gameManager.GetComponent<CheckAndBreakGrapple>().CheckGrappleFunc();
 
-                if (grappleState == true)
+                if (grappleStateReference == true)
                 {
                     grapplePointObject.GetComponent<SpriteRenderer>().enabled = true;
 
@@ -75,11 +74,11 @@ public class GrapplingHook : MonoBehaviour
                 }
             }
 
-            if (grappleState == true)
+            if (grappleStateReference == true)
             {
                 StartCoroutine(CheckBreakNextFixedUpdate());
 
-                if (isBroken == false)
+                if (isGrappleBrokenReference == false)
                 {
                     TurnCalculations();
                 }
@@ -106,49 +105,49 @@ public class GrapplingHook : MonoBehaviour
     {
         yield return new WaitForFixedUpdate();
         //Find Relative Grapple Position (above or below)
-        grappleColliderTop = topCollider.GetComponent<CheckIntersection>().IsObjectIntersecting(); //Checks top collider
+        isGrappleAbove = topCollider.GetComponent<CheckIntersection>().IsObjectIntersecting(); //Checks top collider
 
-        if (grappleColliderTop == false) //If the top collider returned false, then check the bottom collider
+        if (isGrappleAbove == false) //If the top collider returned false, then check the bottom collider
         {
-            grappleColliderBottom = bottomCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
+            isGrappleBelow = bottomCollider.GetComponent<CheckIntersection>().IsObjectIntersecting();
         }
 
         else //If it's true, we know it will be false, so skip the check
         {
-            grappleColliderBottom = false;
+            isGrappleBelow = false;
         }
 
-        Debug.Log("Top state: " + grappleColliderTop);
-        Debug.Log("Bottom state: " + grappleColliderBottom);
-        
+        Debug.Log("Top state: " + isGrappleAbove);
+        Debug.Log("Bottom state: " + isGrappleBelow);
+
         //Finds current input for breaking
-        currentBreakInput = gameObject.GetComponent<VehicleMovement>().breakState;
+        reverseStateReference = gameObject.GetComponent<VehicleMovement>().breakState;
 
         FindTurnMultiplier();
 
         Debug.Log("Turn calculation is done!");
 
-        doCalc = false;
+        singleCalculationCheck = false;
     }
 
     void FindTurnMultiplier()
     {
-        if (grappleColliderTop && !currentBreakInput || grappleColliderBottom && currentBreakInput) //If above and forward OR below and reverse
+        if (isGrappleAbove && !reverseStateReference || isGrappleBelow && reverseStateReference)
         {
-            turnMultiplier = 1;
+            turnDirectionMultiplier = 1;
         }
 
-        if (grappleColliderBottom && !currentBreakInput || grappleColliderTop && currentBreakInput) //If below and forward OR above and reverse
+        if (isGrappleBelow && !reverseStateReference || isGrappleAbove && reverseStateReference)
         {
-            turnMultiplier = -1;
+            turnDirectionMultiplier = -1;
         }
 
-        if (grappleColliderTop && grappleColliderBottom) //If neither above and below
+        if (isGrappleAbove && isGrappleBelow)
         {
-            turnMultiplier = 0;
+            turnDirectionMultiplier = 0;
         }
 
-        else if (grappleColliderTop && grappleColliderBottom) //If both above and below
+        else if (isGrappleAbove && isGrappleBelow)
         {
             Debug.LogWarning("Both checks returned true!!! Debug ASAP!");
         }
@@ -157,19 +156,19 @@ public class GrapplingHook : MonoBehaviour
     IEnumerator CheckBreakNextFixedUpdate()
     {
         yield return new WaitForFixedUpdate();
-        isBroken = gameManager.GetComponent<CheckAndBreakGrapple>().BreakGrappleFunc();
+        isGrappleBrokenReference = gameManager.GetComponent<CheckAndBreakGrapple>().BreakGrappleFunc();
     }    
 
     void TurnCalculations()
     {
         //Finds rotation angle for the RotateAround function with ***MATHS***
         float distanceRadius = springJoint.distance; //Finds grapple distance by reading the distance variable on the spring joint
-        float vehicleVelocity = rb.velocity.magnitude; //Finds current vehicle velocity
+        float vehicleVelocity = carRigidBody.velocity.magnitude; //Finds current vehicle velocity
         //Now the calculations are made
         float grappleCircumference = 2 * piFloat * distanceRadius; //Finds circumference of turning circle (distance)
         float fullRotationTime = grappleCircumference / vehicleVelocity; //Finds the time it would take to finish the circle. Measures in units per second
         float segmentsPerRotation = fullRotationTime / Time.fixedDeltaTime; //Finds how many segments are travelled during whole rotation
-        float rotationAngle = (360 / segmentsPerRotation) * turnMultiplier; //Determines the angle of each segment and filters it through the turnMultiplier
+        float rotationAngle = (360 / segmentsPerRotation) * turnDirectionMultiplier; //Determines the angle of each segment and filters it through the turnMultiplier
 
         //Debug.Log("VELOCITY: " + vehicleVelocity);
         //Debug.Log(grappleCircumference + " / " + vehicleVelocity + " = " + fullRotationTime);
@@ -194,12 +193,12 @@ public class GrapplingHook : MonoBehaviour
         lineRenderer.enabled = false;
         grapplePointObject.GetComponent<SpriteRenderer>().enabled = false;
 
-        grappleColliderTop = false;
-        grappleColliderBottom = false;
-        turnMultiplier = 0;
-        grappleState = false;
-        isBroken = false;
+        isGrappleAbove = false;
+        isGrappleBelow = false;
+        turnDirectionMultiplier = 0;
+        grappleStateReference = false;
+        isGrappleBrokenReference = false;
 
-        doCalc = true;
+        singleCalculationCheck = true;
     }
 }

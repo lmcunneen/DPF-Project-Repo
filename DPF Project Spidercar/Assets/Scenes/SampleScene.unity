@@ -7542,7 +7542,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1459993862}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: 
+        m_MethodName: SetActive
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9268,7 +9268,7 @@ PrefabInstance:
       objectReference: {fileID: 1273589629}
     - target: {fileID: 7749783931185056267, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7749783931185056267, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: m_LocalScale.y

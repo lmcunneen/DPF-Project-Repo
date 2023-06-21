@@ -28,7 +28,7 @@ public class CameraFollowLerp : MonoBehaviour
 
     void FixedUpdate()
     {
-        grappleSuccess = vehicle.GetComponent<GrapplingHook>().grappleState;
+        grappleSuccess = vehicle.GetComponent<GrapplingHook>().grappleStateReference;
         
         if (grappleSuccess)
         {

@@ -17,7 +17,6 @@ public class CheckAndBreakGrapple : MonoBehaviour
     RaycastHit2D grapplePointRaycastHit;
     RaycastHit2D raycastLengthChecker;
     private Vector3 rayDirection;
-    //private Vector3 lengthRayDirection; //Used in archive method. Keeping it if method is restored
 
     public float grappleRayLength; //Length of raycast
     public LayerMask grappleLayers; //Filters only Walls and Poles for grappling raycast
@@ -86,28 +85,4 @@ public class CheckAndBreakGrapple : MonoBehaviour
     {
         grappleHook.transform.position = Vector2.Lerp(grappleOrigin.transform.position, hookPathRaycast.point, Time.deltaTime);
     }
-
-    /* ARCHIVE METHODS:
-     *  rayDirection = (grapplePointObject.transform.position - grappleOrigin.transform.position).normalized;
-
-        grapplePointRaycastHit = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, grappleLayersInverse);
-        debugShape.transform.position = grapplePointRaycastHit.point;
-
-        lengthRayDirection = (grapplePointObject.transform.position - debugShape.transform.position);
-
-        raycastLengthChecker = Physics2D.Raycast(debugShape.transform.position, lengthRayDirection);
-
-        Debug.Log("Distance between break: " + raycastLengthChecker.distance);
-
-        if (raycastLengthChecker.distance < 1.5f)
-        {
-            return false;
-        }
-
-        else
-        {
-            return true;
-        }
-    * ----------------------------------------------------------------------
-    */
 }

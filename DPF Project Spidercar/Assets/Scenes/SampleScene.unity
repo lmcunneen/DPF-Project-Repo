@@ -188,12 +188,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47a288e8b18663544b7e50f17463d384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreCounter: {fileID: 1680579573}
-  deathText: {fileID: 1860056005}
-  respawnText: {fileID: 1763057006}
-  personalBestParent: {fileID: 65167696}
+  currentScoreCounter: {fileID: 1680579573}
+  deathMessageText: {fileID: 1860056005}
+  respawnMessageText: {fileID: 1763057006}
+  personalBestGridLogic: {fileID: 65167696}
   personalBestText: {fileID: 1036851887}
-  finalScoreParent: {fileID: 759539858}
+  finalScoreGridLogic: {fileID: 759539858}
   finalScoreText: {fileID: 206157392}
   deathBackground: {fileID: 2097554740}
   respawnActive: 0
@@ -7733,7 +7733,7 @@ GameObject:
   - component: {fileID: 1680579574}
   - component: {fileID: 1680579573}
   m_Layer: 5
-  m_Name: Score Counter
+  m_Name: Current Score Counter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8246,7 +8246,7 @@ GameObject:
   - component: {fileID: 1860056006}
   - component: {fileID: 1860056005}
   m_Layer: 5
-  m_Name: Death Text
+  m_Name: Death Message Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

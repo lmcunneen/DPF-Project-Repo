@@ -41,7 +41,7 @@ public class PlayerAliveChecker : MonoBehaviour
             vehicle.GetComponent<GrapplingHook>().grapplePointObject.SetActive(true);
             //Resets UI, highest stored score and counter text colour
             gameObject.GetComponent<UpdateUIElement>().ResetUI();
-            carBumper.GetComponent<FindDistanceTravelled>().highestScore = 0;
+            carBumper.GetComponent<FindDistanceTravelled>().highestSessionScore = 0;
             carBumper.GetComponent<FindDistanceTravelled>().scoreCounter.color = Color.red;
         }
     }
@@ -56,7 +56,7 @@ public class PlayerAliveChecker : MonoBehaviour
         vehicle.GetComponent<GrapplingHook>().grapplePointObject.SetActive(false);
         vehicle.GetComponent<GrapplingHook>().lineRenderer.enabled = false;
         //Finds the final score for death screen
-        finalScore = carBumper.GetComponent<FindDistanceTravelled>().highestScore;
+        finalScore = carBumper.GetComponent<FindDistanceTravelled>().highestSessionScore;
         StartCoroutine(gameObject.GetComponent<UpdateUIElement>().DisplayDeathElements(finalScore));
     }
 }

@@ -12,20 +12,20 @@ public class UpdateUIElement : MonoBehaviour
      * Notably, this holds the logic for the game over screen, including the personal best counter
      */
 
-    public Text scoreCounter; //Text that displays current score during gameplay
-    public Text deathText; //Text that states the player has died
-    public Text respawnText; //Text indicating that the player can respawn
-    public GameObject personalBestParent; //Parent object of PB Text, used for scaling and grid logic
-    public GameObject personalBestText; //Child object that holds the actual text for Personal Best
-    public GameObject finalScoreParent; //Parent object of the final score text, used for grid logic
-    public GameObject finalScoreText; //Child object that holds the actual text for Final Score
+    public Text currentScoreCounter;
+    public Text deathMessageText;
+    public Text respawnMessageText;
+    public GameObject personalBestGridLogic;
+    public GameObject personalBestText;
+    public GameObject finalScoreGridLogic;
+    public GameObject finalScoreText;
     public GameObject deathBackground;
-    private Animator personalBestAnimator; //Animator for the PB Text
-    public bool respawnActive; //Bool that activates the respawn state when true
+    private Animator personalBestAnimator;
+    [HideInInspector] public bool respawnActive;
     private int personalBestInt;
     private string personalBestString;
     private string finalScoreString;
-    private Vector3 personalBestScale; //Used for scaling to make PB Text more prominent when final score isn't present
+    private Vector3 personalBestStandaloneScale;
 
     private void Awake()
     {
@@ -34,7 +34,7 @@ public class UpdateUIElement : MonoBehaviour
         personalBestInt = 0;
         finalScoreString = "Final Score: ";
         personalBestAnimator = personalBestText.GetComponent<Animator>();
-        personalBestScale = personalBestParent.transform.localScale;
+        personalBestStandaloneScale = personalBestGridLogic.transform.localScale;
     }
 
     public void UpdateCounterInt(int number, string text, Text element)
@@ -44,34 +44,34 @@ public class UpdateUIElement : MonoBehaviour
 
     public IEnumerator DisplayDeathElements(int score) //Called by PlayerAliveChecker on death
     {
-        scoreCounter.enabled = false;
-        deathText.enabled = true;
+        currentScoreCounter.enabled = false;
+        deathMessageText.enabled = true;
         deathBackground.SetActive(true);
 
         yield return new WaitForSeconds(2f);
 
         if (personalBestInt < score) //If the personal best has been beat, do the following
         {
-            personalBestParent.SetActive(true);
+            personalBestGridLogic.SetActive(true);
             personalBestInt = score;
             UpdateCounterInt(score, personalBestString, personalBestText.GetComponent<Text>());
             personalBestText.GetComponent<Text>().color = Color.green;
             personalBestAnimator.Play("Personal Best"); //Makes it rotate left and right
 
-            personalBestParent.transform.localScale = personalBestScale * 1.5f;
+            personalBestGridLogic.transform.localScale = personalBestStandaloneScale * 1.5f;
 
             yield return new WaitForSeconds(2f);
 
-            respawnText.enabled = true;
+            respawnMessageText.enabled = true;
             respawnActive = true;
         }
 
         else //If the personal best has not been beat, do the following
         {
             UpdateCounterInt(score, finalScoreString, finalScoreText.GetComponent<Text>());
-            personalBestParent.transform.localScale = personalBestScale;
-            personalBestParent.SetActive(true);
-            finalScoreParent.SetActive(true);
+            personalBestGridLogic.transform.localScale = personalBestStandaloneScale;
+            personalBestGridLogic.SetActive(true);
+            finalScoreGridLogic.SetActive(true);
             finalScoreText.SetActive(true);
             personalBestText.SetActive(false);
 
@@ -83,7 +83,7 @@ public class UpdateUIElement : MonoBehaviour
 
             yield return new WaitForSeconds(1f);
 
-            respawnText.enabled = true;
+            respawnMessageText.enabled = true;
             respawnActive = true;
         }
     }
@@ -91,12 +91,12 @@ public class UpdateUIElement : MonoBehaviour
     public void ResetUI() //Called by PlayerAliveChecker to reset UI on respawn
     {
         respawnActive = false;
-        scoreCounter.enabled = true;
-        scoreCounter.text = "Score: 0m";
-        deathText.enabled = false;
-        respawnText.enabled = false;
+        currentScoreCounter.enabled = true;
+        currentScoreCounter.text = "Score: 0m";
+        deathMessageText.enabled = false;
+        respawnMessageText.enabled = false;
         deathBackground.SetActive(false);
-        personalBestParent.SetActive(false);
-        finalScoreParent.SetActive(false);
+        personalBestGridLogic.SetActive(false);
+        finalScoreGridLogic.SetActive(false);
     }
 }

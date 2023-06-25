@@ -38,6 +38,8 @@ public class GrapplingHook : MonoBehaviour
     private Vector3[] lineRendererPoints;
     private float piFloat;
 
+    private bool isTurnValid;
+
     void Awake()
     {
         grapplePointObject.GetComponent<SpriteRenderer>().enabled = false;
@@ -76,14 +78,23 @@ public class GrapplingHook : MonoBehaviour
 
             if (grappleStateReference == true)
             {
+                //Enables the spring joint and line renderer
+                springJoint.enabled = true;
+                lineRenderer.enabled = true;
+
+                lineRendererPoints = new Vector3[] { grapplePointObject.transform.position, gameObject.transform.position }; //Defines the start and end of the line
+                lineRenderer.SetPositions(lineRendererPoints); //Sets the positions to the previously defined positions
+
                 StartCoroutine(CheckBreakNextFixedUpdate());
 
-                if (isGrappleBrokenReference == false)
+                StartCoroutine(CheckRopeLengthNextFixedUpdate());
+
+                if (isGrappleBrokenReference == false && isTurnValid == true)
                 {
                     TurnCalculations();
                 }
 
-                else
+                else if (isGrappleBrokenReference == true)
                 {
                     EndGrapple();
                 }
@@ -153,6 +164,25 @@ public class GrapplingHook : MonoBehaviour
         }
     }
 
+    IEnumerator CheckRopeLengthNextFixedUpdate()
+    {
+        float originalDistance = Vector2.Distance(grapplePointObject.transform.position, gameObject.transform.position);
+        yield return new WaitForFixedUpdate();
+        float updatedDistance = Vector2.Distance(grapplePointObject.transform.position, gameObject.transform.position);
+
+        if (originalDistance > updatedDistance)
+        {
+            springJoint.frequency = 0.5f;
+            isTurnValid = false;
+        }
+
+        else
+        {
+            springJoint.frequency = 5.99f;
+            isTurnValid = true;
+        }
+    }
+
     IEnumerator CheckBreakNextFixedUpdate()
     {
         yield return new WaitForFixedUpdate();
@@ -174,16 +204,10 @@ public class GrapplingHook : MonoBehaviour
         //Debug.Log(grappleCircumference + " / " + vehicleVelocity + " = " + fullRotationTime);
         //Debug.Log(rotationAngle);
 
-        //Enables the spring joint and line renderer
-        springJoint.enabled = true;
-        lineRenderer.enabled = true;
         //Handles Rotation Logic
         Vector3 rotationMask = new Vector3(0, 0, 1); //Only rotates on Z axis
         Vector3 point = grapplePointObject.transform.position; //Assigns the grapple point position to a Vector3 for rotation
         transform.RotateAround(point, rotationMask, rotationAngle); //RotateAround function that enacts the rotation
-
-        lineRendererPoints = new Vector3[] { grapplePointObject.transform.position, gameObject.transform.position }; //Defines the start and end of the line
-        lineRenderer.SetPositions(lineRendererPoints); //Sets the positions to the previously defined positions
     }
 
     void EndGrapple()
@@ -200,5 +224,7 @@ public class GrapplingHook : MonoBehaviour
         isGrappleBrokenReference = false;
 
         singleCalculationCheck = true;
+
+        isTurnValid = false;
     }
 }

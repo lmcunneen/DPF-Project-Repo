@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3278510598220414249}
   m_LocalRotation: {x: 0, y: 0, z: 0.70090926, w: 0.71325046}
-  m_LocalPosition: {x: -7.35, y: 4.01, z: 0}
+  m_LocalPosition: {x: -12.35, y: 4.01, z: 0}
   m_LocalScale: {x: 13.749995, y: 14.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -236,9 +236,9 @@ MonoBehaviour:
   startingPoint: {fileID: 0}
   UIManager: {fileID: 0}
   scoreCounter: {fileID: 0}
-  distanceLength: 0
-  roundedDistance: 0
-  highestScore: 0
+  distanceFromOriginLength: 0
+  roundedDistanceFromOrigin: 0
+  highestSessionScore: 0
 --- !u!1 &7749783931185056256
 GameObject:
   m_ObjectHideFlags: 0
@@ -385,12 +385,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grapplePointObject: {fileID: 0}
   gameManager: {fileID: 0}
-  grappleState: 0
-  brokenDistanceCheck: 0
+  grappleStateReference: 0
   topCollider: {fileID: 3278510598220414249}
   bottomCollider: {fileID: 9215707101707281558}
-  forwardCollider: {fileID: 0}
-  reverseCollider: {fileID: 0}
   springJoint: {fileID: 0}
   lineRenderer: {fileID: 0}
 --- !u!231 &7749783931185056266
@@ -687,7 +684,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9215707101707281558}
   m_LocalRotation: {x: 0, y: 0, z: 0.70090926, w: 0.71325046}
-  m_LocalPosition: {x: 7.35, y: 4.01, z: 0}
+  m_LocalPosition: {x: 12.35, y: 4.01, z: 0}
   m_LocalScale: {x: 13.749995, y: 14.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

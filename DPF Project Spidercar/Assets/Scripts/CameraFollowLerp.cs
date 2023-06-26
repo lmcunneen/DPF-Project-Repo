@@ -15,9 +15,9 @@ public class CameraFollowLerp : MonoBehaviour
     [SerializeField] private float lerpRateInspector;
     [SerializeField] private float transitionRate;
     private float cameraDistance;
-    private bool grappleSuccess;
     private bool transitionStart;
     private bool transitionFinish;
+    private bool isTurnValidReference;
 
     void Start()
     {
@@ -28,9 +28,9 @@ public class CameraFollowLerp : MonoBehaviour
 
     void FixedUpdate()
     {
-        grappleSuccess = vehicle.GetComponent<GrapplingHook>().grappleStateReference;
+        isTurnValidReference = vehicle.GetComponent<GrapplingHook>().isTurnValid;
         
-        if (grappleSuccess)
+        if (isTurnValidReference)
         {
             transitionStart = true;
             transitionFinish = false;

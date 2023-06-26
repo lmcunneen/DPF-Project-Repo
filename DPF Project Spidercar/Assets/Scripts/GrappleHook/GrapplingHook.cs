@@ -38,7 +38,7 @@ public class GrapplingHook : MonoBehaviour
     private Vector3[] lineRendererPoints;
     private float piFloat;
 
-    private bool isTurnValid;
+    public bool isTurnValid;
 
     void Awake()
     {
@@ -207,7 +207,7 @@ public class GrapplingHook : MonoBehaviour
         //Handles Rotation Logic
         Vector3 rotationMask = new Vector3(0, 0, 1); //Only rotates on Z axis
         Vector3 point = grapplePointObject.transform.position; //Assigns the grapple point position to a Vector3 for rotation
-        transform.RotateAround(point, rotationMask, rotationAngle); //RotateAround function that enacts the rotation
+        transform.RotateAround(point, rotationMask, rotationAngle * 0.65f); //RotateAround function that enacts the rotation
     }
 
     void EndGrapple()

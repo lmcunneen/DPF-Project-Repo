@@ -10,8 +10,8 @@ public class VehicleMovement : MonoBehaviour
      */
 
     //VARIABLE DECLARATION//
-    [SerializeField] private float forwardSpeed = 500;
-    [SerializeField] private float reverseSpeed = 300;
+    [SerializeField] private float forwardSpeed;
+    [SerializeField] private float reverseSpeed;
     Rigidbody2D rigidBody;
     [HideInInspector] public bool breakState; //Used to determine if the player was breaking or not before grappling
     bool grappleSuccess; //Used to see if control should be suspended if grapple would be successful

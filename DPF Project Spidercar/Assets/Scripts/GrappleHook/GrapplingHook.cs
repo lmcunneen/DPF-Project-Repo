@@ -75,8 +75,11 @@ public class GrapplingHook : MonoBehaviour
                     StartCoroutine(CheckTurnNextFixedUpdate());
                 }
             }
+        }
 
-            if (grappleStateReference == true)
+        if (grappleStateReference == true)
+        {
+            if (Input.GetKey(KeyCode.Mouse0))
             {
                 //Enables the spring joint and line renderer
                 springJoint.enabled = true;
@@ -99,10 +102,17 @@ public class GrapplingHook : MonoBehaviour
                     EndGrapple();
                 }
             }
+
+            else //When LMB is let go, do the following...
+            {
+                EndGrapple();
+            }
         }
 
-        else //When LMB is let go, do the following...
+        if (!Input.GetKey(KeyCode.Mouse0))
         {
+            singleCalculationCheck = true;
+
             EndGrapple();
         }
     }
@@ -216,14 +226,13 @@ public class GrapplingHook : MonoBehaviour
         springJoint.enabled = false;
         lineRenderer.enabled = false;
         grapplePointObject.GetComponent<SpriteRenderer>().enabled = false;
+        gameManager.GetComponent<CheckAndBreakGrapple>().grappleHook.GetComponent<SpriteRenderer>().enabled = false;
 
         isGrappleAbove = false;
         isGrappleBelow = false;
         turnDirectionMultiplier = 0;
         grappleStateReference = false;
         isGrappleBrokenReference = false;
-
-        singleCalculationCheck = true;
 
         isTurnValid = false;
     }

@@ -14,6 +14,8 @@ public class FollowObject : MonoBehaviour
     public GameObject objectToFollow;
     [SerializeField] private float zPos;
     [SerializeField] private bool isStandalone; //Bool that runs the function in update if true. Done only for objects that these functions are NOT called elsewhere in the scripts
+    [SerializeField] private bool isFollowing = true;
+    [SerializeField] private bool isRotating = true;
 
     void Update()
     {
@@ -25,13 +27,25 @@ public class FollowObject : MonoBehaviour
 
     public void PivotFunction(GameObject pivot, float zPos)
     {
-        //Conforms object to the position
-        Vector3 pivotPosition = Vector3.Scale(pivot.transform.position, new Vector3(1, 1, 0));
-        pivotPosition.z = zPos;
-        gameObject.transform.position = pivotPosition;
-        //Conforms object to the rotation
-        Quaternion pivotRotation = pivot.transform.rotation;
-        Quaternion objectRotation = pivotRotation * Quaternion.Euler(0, 0, 1);
-        gameObject.transform.rotation = objectRotation;
+        if (isFollowing)
+        {
+            //Conforms object to the position
+            Vector3 pivotPosition = Vector3.Scale(pivot.transform.position, new Vector3(1, 1, 0));
+            pivotPosition.z = zPos;
+            gameObject.transform.position = pivotPosition;
+        }
+        
+        if (isRotating)
+        {
+            //Conforms object to the rotation
+            Quaternion pivotRotation = pivot.transform.rotation;
+            Quaternion objectRotation = pivotRotation * Quaternion.Euler(0, 0, 1);
+            gameObject.transform.rotation = objectRotation;
+        }
+        
+        if (!isFollowing && !isRotating)
+        {
+            Debug.LogWarning("The bool variables for the FollowObject script on '" + gameObject.name + "' are both false! Fix ASAP!!!");
+        }
     }
 }

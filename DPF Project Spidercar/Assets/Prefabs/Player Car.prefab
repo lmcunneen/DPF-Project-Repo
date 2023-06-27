@@ -109,6 +109,8 @@ MonoBehaviour:
   objectToFollow: {fileID: 0}
   zPos: 0
   isStandalone: 1
+  isFollowing: 1
+  isRotating: 1
 --- !u!1 &7749783929577195494
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,6 +392,7 @@ MonoBehaviour:
   bottomCollider: {fileID: 9215707101707281558}
   springJoint: {fileID: 0}
   lineRenderer: {fileID: 0}
+  isTurnValid: 0
 --- !u!231 &7749783931185056266
 SpringJoint2D:
   m_ObjectHideFlags: 0

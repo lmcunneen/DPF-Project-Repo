@@ -17,6 +17,9 @@ public class CheckAndBreakGrapple : MonoBehaviour
     RaycastHit2D grapplePointRaycastHit;
     RaycastHit2D raycastLengthChecker;
     private Vector3 rayDirection;
+    private bool hasValidCollisionReferenced;
+
+    private bool shotGrappleState;
 
     public float grappleRayLength; //Length of raycast
     public LayerMask grappleLayers; //Filters only Walls and Poles for grappling raycast
@@ -26,23 +29,66 @@ public class CheckAndBreakGrapple : MonoBehaviour
     void Start()
     {
         grappleRayLength = 30f;
+        shotGrappleState = false;
     }
 
+    public IEnumerator ShootGrapple()
+    {
+        yield return new WaitForFixedUpdate();
+
+        hasValidCollisionReferenced = grappleHook.GetComponent<HookIntersection>().hasValidCollision; //Checks if the collider is intersecting with anything
+        var shootingDistance = Vector2.Distance(grappleHook.transform.position, grappleOrigin.transform.position);
+
+        if (shootingDistance < 30f) //Makes it only allow grapples within 30 units
+        {
+            if (!hasValidCollisionReferenced)
+            {
+                shotGrappleState = false;
+                
+                StartCoroutine(ShootGrapple());
+            }
+
+            else
+            {
+                Debug.Log("The grapple hit!");
+                grappleHook.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+
+                shotGrappleState = true;
+            }
+        }
+
+        else
+        {
+            Debug.Log("The grapple missed!");
+            StopAllCoroutines();
+            grappleHook.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+
+            shotGrappleState = false;
+        }
+    }
+    
     public bool CheckGrappleFunc()
     {
-        rayDirection = (grapplePointObject.transform.position - grappleOrigin.transform.position).normalized;
+        grappleHook.transform.position = grappleOrigin.transform.position;
+        grappleHook.GetComponent<SpriteRenderer>().enabled = true;
+        grappleHook.transform.right = grapplePointObject.transform.position - grappleOrigin.transform.position; //Makes hook face desired direction
+        grappleHook.GetComponent<Rigidbody2D>().AddForce(grappleHook.transform.right * 3000f);
 
-        hookPathRaycast = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, hookPathLayers);
+        StartCoroutine(ShootGrapple());
 
-        debugShape.transform.position = hookPathRaycast.point;
+        /*Issue is here currently:
+         * The checks are not currently outputting correctly, and dont turn on at all until some unknown criteria is met
+         * So the checks constantly updating is probably not happening correctly
+         * Best way to solve this is to go back to the dreaded notepad document and go through line by line once again
+         * Good luck future me!
+         */ 
 
-        grapplePointRaycastHit = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, grappleLayers);
-
-        //Debug.DrawRay(grappleOrigin.transform.position, rayDirection * grappleRayLength, debugGrappleColour, 1f);
-
-        if (grapplePointRaycastHit == true)
+        if (shotGrappleState)
         {
-            Debug.Log("Raycast has hit!");
+            rayDirection = (grapplePointObject.transform.position - grappleOrigin.transform.position).normalized;
+
+            grapplePointRaycastHit = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, grappleLayers);
+
             grapplePointObject.transform.position = grapplePointRaycastHit.point;
             //debugShape.transform.position = grapplePointRaycastHit.point;
             return true;
@@ -79,10 +125,5 @@ public class CheckAndBreakGrapple : MonoBehaviour
         {
             return true;
         }
-    }
-
-    private void Update()
-    {
-        grappleHook.transform.position = Vector2.Lerp(grappleOrigin.transform.position, hookPathRaycast.point, Time.deltaTime);
     }
 }

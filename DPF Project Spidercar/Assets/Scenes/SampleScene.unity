@@ -8985,7 +8985,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.8
 --- !u!50 &2076333509
 Rigidbody2D:
   serializedVersion: 4
@@ -9475,8 +9475,16 @@ PrefabInstance:
       value: 2048
       objectReference: {fileID: 0}
     - target: {fileID: 7749783931185056266, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7749783931185056266, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: m_Distance
       value: 75.91352
+      objectReference: {fileID: 0}
+    - target: {fileID: 7749783931185056266, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
+      propertyPath: m_DampingRatio
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7749783931185056266, guid: ac2f4be0ac51ac6409d3f3823b280f31, type: 3}
       propertyPath: m_ConnectedRigidBody

@@ -81,9 +81,9 @@ public class CheckAndBreakGrapple : MonoBehaviour
          * So the checks constantly updating is probably not happening correctly
          * Best way to solve this is to go back to the dreaded notepad document and go through line by line once again
          * Good luck future me!
-         */ 
+         */
 
-        if (shotGrappleState)
+        /*if (shotGrappleState)
         {
             rayDirection = (grapplePointObject.transform.position - grappleOrigin.transform.position).normalized;
 
@@ -91,6 +91,23 @@ public class CheckAndBreakGrapple : MonoBehaviour
 
             grapplePointObject.transform.position = grapplePointRaycastHit.point;
             //debugShape.transform.position = grapplePointRaycastHit.point;
+            return true;
+        }
+
+        else
+        {
+            return false;
+        }*/
+
+        rayDirection = (grapplePointObject.transform.position - grappleOrigin.transform.position).normalized;
+
+        grapplePointRaycastHit = Physics2D.Raycast(grappleOrigin.transform.position, rayDirection, grappleRayLength, grappleLayers);
+
+        grapplePointObject.transform.position = grapplePointRaycastHit.point;
+        //debugShape.transform.position = grapplePointRaycastHit.point;
+
+        if (grapplePointRaycastHit)
+        {
             return true;
         }
 

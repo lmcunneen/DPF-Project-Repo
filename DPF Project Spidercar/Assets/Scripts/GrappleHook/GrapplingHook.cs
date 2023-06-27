@@ -226,7 +226,7 @@ public class GrapplingHook : MonoBehaviour
         springJoint.enabled = false;
         lineRenderer.enabled = false;
         grapplePointObject.GetComponent<SpriteRenderer>().enabled = false;
-        gameManager.GetComponent<CheckAndBreakGrapple>().grappleHook.GetComponent<SpriteRenderer>().enabled = false;
+        //gameManager.GetComponent<CheckAndBreakGrapple>().grappleHook.GetComponent<SpriteRenderer>().enabled = false;
 
         isGrappleAbove = false;
         isGrappleBelow = false;
